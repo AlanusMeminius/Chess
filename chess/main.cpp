@@ -1,5 +1,5 @@
 #include "ui/SplashScreen.h"
-#include "./core/Entry.h"
+#include "./core/Application.h"
 
 #define DEBUG
 
@@ -9,8 +9,8 @@ int main(int argc, char* argv[])
 
 #ifdef DEBUG
 	int select = 1;
-	Entry entry(select);
-	entry.showWindow();
+	Application app(select);
+    app.show_window();
 #endif
 #ifndef DEBUG
     SplashScreen splashScreen;

@@ -1,31 +1,31 @@
 #pragma execution_character_set("utf-8")
-#include "Entry.h"
+#include "Application.h"
 
-Entry::Entry(int index) : ui(new BaseWindow), engine(new Engine(index))
+Application::Application(int index) : ui(new BaseWindow), engine(new Engine(index))
 {
-	engine->chooseMode();
-	initPieces();
+	engine->choose_mode();
+	_init_pieces();
 }
 
-void Entry::showWindow() const
+void Application::show_window() const
 {
 	ui->show();
 }
 
-Entry::~Entry()
+Application::~Application()
 {
 	delete ui;
 	delete engine;
 }
 
-void Entry::initPieces()
+void Application::_init_pieces()
 {
-	for (auto& piece : engine->pieces)
+	for (auto& piece : engine->pieces_)
 	{
-		pieceWidgets.push_back(new PieceWidget(piece));
-		PieceWidget* p = pieceWidgets.back();
-		ui->chessBoard->boardLayout->addWidget(p, piece->Pos / 9, piece->Pos % 9);
-		connect(p, &PieceWidget::getPos, this, &Entry::piecePressEvent);
+		pieceWidgets_.push_back(new PieceWidget(piece));
+		PieceWidget* p = pieceWidgets_.back();
+		ui->chessBoard->boardLayout->addWidget(p, piece->pos_ / 9, piece->pos_ % 9);
+		connect(p, &PieceWidget::getPos, this, &Application::piece_press_event);
 	}
 }
 
@@ -46,7 +46,7 @@ void Entry::initPieces()
  *      - 不可移动，status bar-msg
  * */
 
-void Entry::piecePressEvent(int pos)
+void Application::piece_press_event(int pos)
 {
 	// 先检查位置是不是棋子, 检查轮走棋方和选中棋子是否对应
 	// 记录棋子位置, 改棋子样式
@@ -55,7 +55,7 @@ void Entry::piecePressEvent(int pos)
 	// 获取可移动位置 checked
 
 	qDebug() << pos;
-	switch (engine->checkPos(pos))
+	switch (engine->check_pos(pos))
 	{
 	default:
 		break;
