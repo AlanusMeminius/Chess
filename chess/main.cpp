@@ -1,4 +1,3 @@
-#include <QApplication>
 #include "ui/SplashScreen.h"
 #include "./core/Entry.h"
 

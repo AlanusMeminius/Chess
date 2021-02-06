@@ -42,6 +42,9 @@
   <ItemGroup>
     <None Include="resources\style.qss" />
   </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resources\resources.qrc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7819C765-2616-4BF0-9A90-9489674C4856}</ProjectGuid>
     <Keyword>QtVS_v303</Keyword>
@@ -81,11 +84,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">

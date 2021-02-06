@@ -4,9 +4,7 @@
 
 #include <QFile>
 #include <QMainWindow>
-#include <QtCore/QVariant>
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
 
 #include "ChessBoard.h"
 #include "SideBar.h"
@@ -26,7 +24,7 @@ public:
             chessBoard(new ChessBoard),
             sideBar(new SideBar) {
         // set icon, windowSize, objectName
-        this->setWindowIcon(QPixmap(":/resources/icon.png"));
+        this->setWindowIcon(QPixmap(":/icon.png"));
         this->resize(980, 900);
         this->setObjectName(QString::fromUtf8("MainWindow"));
 
@@ -35,7 +33,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralWidget"));
 
         // set style
-        QFile styleFile(":/resources/style.qss");
+        QFile styleFile(":/style.qss");
         styleFile.open(QFile::ReadOnly);
         QString style(styleFile.readAll());
         this->setStyleSheet(style);

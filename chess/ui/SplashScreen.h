@@ -4,7 +4,6 @@
 
 #include <QTimer>
 #include <map>
-#include <QDialog>
 #include <QGraphicsDropShadowEffect>
 
 #include "Ui_Splashscreen.h"
@@ -29,6 +28,7 @@ public:
             timer(new QTimer) {
         // init UI
         ui->setupUi(this);
+        setWindowIcon(QPixmap(":/icon.png"));
 
         // remove title bar
         setWindowFlags(Qt::FramelessWindowHint);

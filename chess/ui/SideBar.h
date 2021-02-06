@@ -5,7 +5,6 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QListWidget>
 
@@ -81,7 +80,7 @@ public:
 
         // add time record label
         timeRecordLabel = new CustomLabel(
-                sideBarMainLayout, "timeRecordLabel", "对战计时", 30
+	        sideBarMainLayout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
         );
         timeRecordLabel->setFont(boldFont);
 

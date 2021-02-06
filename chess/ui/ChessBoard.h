@@ -2,11 +2,9 @@
 #ifndef CHESS_CHESSBOARD_H
 #define CHESS_CHESSBOARD_H
 
-#include <QFrame>
 #include <QWidget>
 #include <QResizeEvent>
 #include <QtWidgets/QBoxLayout>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QGridLayout>
 
 

@@ -1,3 +1,4 @@
+#pragma execution_character_set("utf-8")
 #include "Entry.h"
 
 Entry::Entry(int index) : ui(new BaseWindow), engine(new Engine(index))
