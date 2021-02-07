@@ -5,8 +5,7 @@
 #include <string>
 #include <memory>
 
-class Piece
-{
+class Piece {
 public:
 	bool camp_;
 	int role_;
@@ -17,8 +16,7 @@ public:
 };
 
 
-class Engine
-{
+class Engine {
 	int mode_;
 
 protected:
@@ -27,19 +25,6 @@ protected:
 public:
 	std::vector<char> board_;
 	std::vector<std::shared_ptr<Piece>> pieces_;
-	int old_select_ = -1;
-	bool current_camp_ = true;
-
-private:
-
-	void _chess_self();
-
-	// ReSharper disable once CppInconsistentNaming
-	void _chess_AI();
-
-	void _chess_Net();
-
-	
 
 public:
 	explicit Engine(int select);
@@ -47,8 +32,6 @@ public:
 	void choose_mode();
 
 	void update_representation(int&);
-
-	bool check_role_camp(int&);
 
 	bool check_strategy(int&);
 };

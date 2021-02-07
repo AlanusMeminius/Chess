@@ -1,8 +1,7 @@
 #include "Engine.h"
 #include <cctype>
 
-Piece::Piece(char role, bool camp, int pos) : camp_(camp), pos_(pos)
-{
+Piece::Piece(char role, bool camp, int pos) : camp_(camp), pos_(pos) {
 	std::vector<char> types = {'k', 'a', 'b', 'n', 'r', 'c', 'p'};
 	const auto iter = std::find(types.begin(), types.end(), tolower(role));
 	if (iter != types.end())
@@ -12,13 +11,10 @@ Piece::Piece(char role, bool camp, int pos) : camp_(camp), pos_(pos)
 }
 
 
-Engine::Engine(int select) : mode_(select)
-{
+Engine::Engine(int select) : mode_(select) {
 	int index = 0;
-	for (const auto& item : initChessBoard)
-	{
-		if (!ispunct(item))
-		{
+	for (const auto& item : initChessBoard) {
+		if (!ispunct(item)) {
 			board_.emplace_back(item);
 			pieces_.push_back(std::make_shared<Piece>(item, isupper(item) != 0, index));
 			index++;
@@ -26,45 +22,14 @@ Engine::Engine(int select) : mode_(select)
 	}
 }
 
-void Engine::choose_mode()
-{
-	switch (mode_)
-	{
-	default:
-		this->_chess_self();
-		break;
-	case 1:
-		this->_chess_AI();
-		break;
-	case 2:
-		this->_chess_Net();
-		break;
-	}
+void Engine::choose_mode() {
 }
 
 
-void Engine::_chess_self()
-{
+void Engine::update_representation(int&) {
 }
 
-void Engine::_chess_AI()
-{
-}
 
-void Engine::_chess_Net()
-{
-}
-
-void Engine::update_representation(int&)
-{
-}
-
-bool Engine::check_role_camp(int& pos)
-{
-	return (pieces_[pos]->role_ < 9 && pieces_[pos]->camp_ == current_camp_) ? true : false;
-}
-
-bool Engine::check_strategy(int&)
-{
-	return false;
+bool Engine::check_strategy(int&) {
+	return true;
 }
