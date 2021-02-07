@@ -1,4 +1,3 @@
-
 #ifndef CHESS_ENGINE_H
 #define CHESS_ENGINE_H
 
@@ -20,8 +19,7 @@ public:
 
 class Engine
 {
-private:
-	int Mode;
+	int mode_;
 
 protected:
 	const std::string initChessBoard = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
@@ -41,14 +39,18 @@ private:
 
 	void _chess_Net();
 
-	void _update_representation();
+	
 
 public:
 	explicit Engine(int select);
 
 	void choose_mode();
 
-	int check_pos(int&);
+	void update_representation(int&);
+
+	bool check_role_camp(int&);
+
+	bool check_strategy(int&);
 };
 
 

@@ -1,9 +1,7 @@
-
 #ifndef CHESS_APPLICATION_H
 #define CHESS_APPLICATION_H
 
 #include <QObject>
-#include <memory>
 
 #include "Engine.h"
 #include "../ui/BaseWindow.h"
@@ -12,11 +10,10 @@
 class Application : public QObject
 {
 Q_OBJECT
-private:
 	std::vector<PieceWidget*> pieceWidgets_;
+bool is_first_step = true;
 
-private:
-	BaseWindow* ui;
+BaseWindow* ui;
 	Engine* engine;
 
 private slots:
@@ -25,6 +22,8 @@ private slots:
 
 private:
 	void _init_pieces();
+void _change_highlight(int&, int&);
+void _move_pieces(int&, int&);
 
 public:
 	explicit Application(int index);
