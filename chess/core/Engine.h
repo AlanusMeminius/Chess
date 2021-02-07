@@ -9,9 +9,9 @@
 class Piece
 {
 public:
-	bool Camp;
-	int Role;
-	int Pos;
+	bool camp_;
+	int role_;
+	int pos_;
 
 public:
 	Piece(char role, bool camp, int pos);
@@ -24,30 +24,31 @@ private:
 	int Mode;
 
 protected:
-	const std::string InitChessBoard = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
+	const std::string initChessBoard = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
 		"000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
 public:
-	std::vector<char> board;
-	std::vector<std::shared_ptr<Piece>> pieces;
-	int oldSelect = -1;
-	bool currentCamp = true;
+	std::vector<char> board_;
+	std::vector<std::shared_ptr<Piece>> pieces_;
+	int old_select_ = -1;
+	bool current_camp_ = true;
 
 private:
 
-	void chessSelf();
+	void _chess_self();
 
-	void chessAI();
+	// ReSharper disable once CppInconsistentNaming
+	void _chess_AI();
 
-	void chessNet();
+	void _chess_Net();
 
-	void updateRepresentation();
+	void _update_representation();
 
 public:
 	explicit Engine(int select);
 
-	void chooseMode();
+	void choose_mode();
 
-	int checkPos(int&);
+	int check_pos(int&);
 };
 
 

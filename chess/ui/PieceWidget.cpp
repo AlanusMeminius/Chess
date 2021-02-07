@@ -7,7 +7,7 @@ PieceWidget::PieceWidget(std::shared_ptr<Piece>& piece) : logicPiece(piece)
 
 void PieceWidget::paintEvent(QPaintEvent* event)
 {
-	if (logicPiece->Role > 8)
+	if (logicPiece->role_ > 8)
 	{
 	}
 	else
@@ -21,7 +21,7 @@ void PieceWidget::paintEvent(QPaintEvent* event)
 
 void PieceWidget::mousePressEvent(QMouseEvent*)
 {
-	emit getPos(logicPiece->Pos);
+	emit getPos(logicPiece->pos_);
 }
 
 //void PieceWidget::getPos(std::pair<int, int>) {
