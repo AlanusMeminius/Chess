@@ -1,4 +1,3 @@
-
 #ifndef CHESS_PIECEWIDGET_H
 #define CHESS_PIECEWIDGET_H
 
@@ -16,9 +15,10 @@ public:
 public:
 	explicit PieceWidget(std::shared_ptr<Piece>& piece);
 	void HighLightPiece();
+	void ReverseHighLight();
 
 signals:
-	void getPos(int);	
+	void getPos(int);
 
 protected:
 	void paintEvent(QPaintEvent* event) override;

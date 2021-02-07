@@ -1,4 +1,3 @@
-#pragma execution_character_set("utf-8")
 #include "Application.h"
 
 Application::Application(int index) : ui(new BaseWindow), engine(new Engine(index))
@@ -30,11 +29,6 @@ void Application::_init_pieces()
 }
 
 /*
- * case1: 不是棋子位置 -> pass
- * case2: 开局第一次选中棋子 -> highlight
- * case3: 没有选中己方棋子的情况下，选中对方棋子 -> pass
- * case3：选中己方棋子，再选择位置可行 -> 移动棋子(更改控件)
- * case4：选中己方棋子，再选择位置不可行 -> msg
  * // 第一次选棋子
  * - 不是棋子位置 或是对方棋子-> pass
  * - 是我方棋子 -> highlight, flag
@@ -48,23 +42,49 @@ void Application::_init_pieces()
 
 void Application::piece_press_event(int pos)
 {
-	// 先检查位置是不是棋子, 检查轮走棋方和选中棋子是否对应
-	// 记录棋子位置, 改棋子样式
-	// 检查是否已经选中一枚己方棋子
-	// 根据棋子类型获取移动规则
-	// 获取可移动位置 checked
-
-	qDebug() << pos;
-	switch (engine->check_pos(pos))
+	/*默认是第一步，检查到是行进方棋子，highlight， reverse flag*/
+	if (is_first_step)
 	{
-	default:
-		break;
-	case 2:
-		//pieceWidgets[pos]->HighLightPiece();
-		break;
-	case 1:
-		// 移动棋子
-		break;
-		//
+		if (engine->check_role_camp(pos))
+		{
+			pieceWidgets_[pos]->HighLightPiece();
+			engine->old_select_ = pos;
+			is_first_step = false;
+		}
 	}
+		/*检查第二步*/
+	else
+	{
+		/*如果是行进方棋子，更改高亮*/
+		if (engine->check_role_camp(pos))
+			this->_change_highlight(engine->old_select_, pos);
+			/*如果是其他位置，搜索移动策略*/
+		else
+		{
+			/*如果可以移动，移动棋子*/
+			if (engine->check_strategy(pos))
+			{
+				this->_move_pieces(engine->old_select_, pos);
+				is_first_step = true;
+			}
+				/*如果不可以移动，显示状态栏信息*/
+			else
+			{
+				// status bar msg
+			}
+		}
+	}
+}
+
+void Application::_change_highlight(int& old, int& current)
+{
+	pieceWidgets_[old]->ReverseHighLight();
+	pieceWidgets_[current]->HighLightPiece();
+}
+
+void Application::_move_pieces(int& old, int& current)
+{
+	// ...
+
+	engine->update_representation(current);
 }

@@ -1,7 +1,14 @@
-
 #include "PieceWidget.h"
 
 PieceWidget::PieceWidget(std::shared_ptr<Piece>& piece) : logicPiece(piece)
+{
+}
+
+void PieceWidget::HighLightPiece()
+{
+}
+
+void PieceWidget::ReverseHighLight()
 {
 }
 
