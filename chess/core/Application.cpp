@@ -49,7 +49,7 @@ void Application::_check_first_step(int& pos) {
 			qDebug() << "current camp: " << current_camp_ << ", select: " << pos;
 			pieceWidgets_[pos]->HighLightPiece();
 			previous_select_ = pos;
-			is_first_step = !is_first_step;
+			is_first_step_ = !is_first_step_;
 		} else {
 			qDebug() << "Now turn to other side";
 		}
@@ -68,17 +68,18 @@ void Application::_check_second_step(int& pos) {
 		if (engine->check_strategy(pos)) {
 			qDebug() << "move: " << previous_select_ << " to " << pos;
 			this->_move_pieces(previous_select_, pos);
-			is_first_step = !is_first_step;
+			is_first_step_ = !is_first_step_;
 			current_camp_ = !current_camp_;
 		} else {
-			qDebug() << "can not move!";
+			//qDebug() << "can not move!";
+			ui->sendMsg(QString::fromLatin1("can not move!"));
 		}
 	}
 }
 
 
 void Application::piece_click_event(int pos) {
-	if (is_first_step) {
+	if (is_first_step_) {
 		_check_first_step(pos);
 	} else {
 		_check_second_step(pos);

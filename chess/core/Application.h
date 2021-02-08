@@ -10,7 +10,7 @@
 class Application : public QObject {
 Q_OBJECT
 	std::vector<PieceWidget*> pieceWidgets_;
-bool is_first_step = true;
+bool is_first_step_ = true;
 int previous_select_ = -1;
 bool current_camp_ = true;
 
