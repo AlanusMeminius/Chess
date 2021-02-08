@@ -27,14 +27,16 @@ protected:
         const QPoint halfHeightWidth(PieceList[0]->width() / 2,
                                      PieceList[0]->width() / 2);
 
-        for (int i = 0; i < PieceList.size(); i++) {
-            if (i % 9 == 0)
-                painter.drawLine(PieceList[i]->pos() + halfHeightWidth,
-                                 PieceList[i + 8]->pos() + halfHeightWidth);
-        }
+        // 画横线
+        for (int i = 0; i < 10; i++)
+            painter.drawLine(PieceList[i * 9]->pos() + halfHeightWidth,
+                             PieceList[i * 9 + 8]->pos() + halfHeightWidth);
+        // 画竖线
         for (int j = 0; j < 9; j++) {
+            // 画两边的长竖线
             if (j == 0 || j == 8)
                 painter.drawLine(PieceList[j]->pos() + halfHeightWidth, PieceList[j + 81]->pos() + halfHeightWidth);
+                // 画中间的短竖线
             else {
                 painter.drawLine(PieceList[j]->pos() + halfHeightWidth, PieceList[36 + j]->pos() + halfHeightWidth);
                 painter.drawLine(
