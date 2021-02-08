@@ -80,7 +80,7 @@ public:
 
         // add time record label
         timeRecordLabel = new CustomLabel(
-	        sideBarMainLayout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
+                sideBarMainLayout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
         );
         timeRecordLabel->setFont(boldFont);
 

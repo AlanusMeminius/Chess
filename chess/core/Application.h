@@ -9,33 +9,39 @@
 
 class Application : public QObject {
 Q_OBJECT
-	std::vector<PieceWidget*> pieceWidgets_;
-bool is_first_step_ = true;
-int previous_select_ = -1;
-bool current_camp_ = true;
+    std::vector<PieceWidget *> pieceWidgets_;
+    bool is_first_step_ = true;
+    int previous_select_ = -1;
+    bool current_camp_ = true;
 
-BaseWindow* ui;
-	Engine* engine;
+    BaseWindow *ui;
+    Engine *engine;
 
 private slots:
 
-void piece_click_event(int pos);
+    void piece_click_event(int pos);
 
 private:
-void _init_pieces();
-bool _check_role(int&) const;
-bool _check_camp(int&) const;
-void _check_first_step(int&);
-void _check_second_step(int&);
-void _change_highlight(int&, int&);
-void _move_pieces(int&, int&);
+    void _init_pieces();
+
+    bool _check_role(int &) const;
+
+    bool _check_camp(int &) const;
+
+    void _check_first_step(int &);
+
+    void _check_second_step(int &);
+
+    void _change_highlight(int &, int &);
+
+    void _move_pieces(int &, int &);
 
 public:
-	explicit Application(int index);
+    explicit Application(int index);
 
-	~Application() override;
+    ~Application() override;
 
-void show_window() const;
+    void show_window() const;
 };
 
 #endif //CHESS_ENTRY_H
