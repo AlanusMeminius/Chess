@@ -1,9 +1,9 @@
-
 #ifndef CHESS_BASEWINDOW_H
 #define CHESS_BASEWINDOW_H
 
 #include <QFile>
 #include <QMainWindow>
+#include <QStatusBar>
 #include <QtWidgets/QWidget>
 
 #include "ChessBoard.h"
@@ -17,12 +17,14 @@ private:
 public:
     ChessBoard *chessBoard;
     SideBar *sideBar;
+    QStatusBar *statusBar;
 public:
     BaseWindow() :
             centralwidget(new QWidget(this)),
             mainLayout(new QHBoxLayout(centralwidget)),
             chessBoard(new ChessBoard),
-            sideBar(new SideBar) {
+            sideBar(new SideBar),
+            statusBar(new QStatusBar) {
         // set icon, windowSize, objectName
         this->setWindowIcon(QPixmap(":/icon.png"));
         this->resize(980, 900);
@@ -35,7 +37,7 @@ public:
         // set style
         QFile styleFile(":/style.qss");
         styleFile.open(QFile::ReadOnly);
-        QString style(styleFile.readAll());
+        const QString style(styleFile.readAll());
         this->setStyleSheet(style);
 
         // set main layout
@@ -49,7 +51,13 @@ public:
         // add sidebar
         mainLayout->addWidget(sideBar);
         sideBar->setMaximumWidth(200);
-    };
+
+        setStatusBar(statusBar);
+    }
+
+    void sendMsg(const QString &msg) const {
+        statusBar->showMessage(msg);
+    }
 
 };
 
