@@ -12,30 +12,39 @@
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
+    /*
+     * 棋子控件，加载棋子图片
+     * */
     class PieceWidget : public QSvgWidget {
-        Q_OBJECT
+    Q_OBJECT
     public:
         std::shared_ptr<Piece> logicPiece;
 
     public:
         explicit PieceWidget(std::shared_ptr<Piece> &piece) : logicPiece(piece) {}
 
-        signals:
+    signals:
 
-                void getPos(int);
+        void getPos(int);
 
     protected:
         void mousePressEvent(QMouseEvent *) { emit getPos(logicPiece->pos_); }
     };
 
+    /*
+     * 棋盘控件，加载棋盘图片
+     * */
     class ChessBoardQWidget : public QSvgWidget {
-        Q_OBJECT
+    Q_OBJECT
     public:
         ChessBoardQWidget() { load(QString(":/board.svg")); }
     };
 
+    /*
+     * 棋盘主控件，重写resizeEvent，使子控件->棋盘控件保持比例
+     * */
     class ChessBoard : public QWidget {
-        Q_OBJECT
+    Q_OBJECT
     private:
         int widthRatio;
         int heightRatio;

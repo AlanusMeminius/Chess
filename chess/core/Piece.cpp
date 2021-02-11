@@ -13,5 +13,5 @@ Piece::Piece(char role, bool camp, int pos) : camp_(camp), pos_(pos) {
     if (iter != types.end())
         role_ = std::distance(std::begin(types), iter); // NOLINT(clang-diagnostic-shorten-64-to-32)
     else
-        role_ = 9;
+        role_ = 7;
 }

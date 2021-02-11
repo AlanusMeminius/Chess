@@ -14,7 +14,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Ui {
     class BaseWindow : public QMainWindow {
-        Q_OBJECT
+    Q_OBJECT
     private:
         QPropertyAnimation *animation;
         QWidget *centralwidget;
@@ -22,6 +22,7 @@ namespace Ui {
     public:
         Ui::ChessBoard *chessBoard;
         Ui::SideBar *sideBar;
+        QLabel *statusLabel;
         QStatusBar *statusBar;
     public:
         BaseWindow() :
@@ -29,6 +30,7 @@ namespace Ui {
                 mainLayout(new QHBoxLayout),
                 chessBoard(new ChessBoard),
                 sideBar(new Ui::SideBar),
+                statusLabel(new QLabel),
                 statusBar(new QStatusBar),
                 animation(new QPropertyAnimation) {
             // set icon, windowSize, objectName
@@ -61,6 +63,7 @@ namespace Ui {
             // add sidebar
             mainLayout->addWidget(sideBar);
             sideBar->setMaximumWidth(200);
+            sideBar->setMinimumWidth(150);
 
             setStatusBar(statusBar);
         }
@@ -74,7 +77,8 @@ namespace Ui {
         }
 
         void sendMsg(const QString &msg) const {
-            statusBar->showMessage(msg);
+            QString messsage = tr(" Status Info | ") + msg;
+            statusBar->showMessage(messsage);
         }
 
     };
