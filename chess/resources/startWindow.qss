@@ -1,0 +1,26 @@
+QFrame {
+color: rgb(255, 249, 247);
+background-color: #4C566A;
+border-radius:10px;
+}
+
+QPushButton {
+color: #E5E9F0;
+background-color: #5E81AC;
+border: none;
+border-radius:7px;
+
+}
+
+QProgressBar {
+background-color: #434C5E;
+color: #D8DEE9;
+border-style: none;
+border-radius:10px;
+text-align:center;
+}
+
+QProgressBar::chunk {
+border-radius:10px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0.369, x2:1, y2:0.727, stop:0 rgba(0, 135, 202, 255), stop:1 rgba(67, 92, 255, 255));
+}

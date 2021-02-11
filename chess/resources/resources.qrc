@@ -3,7 +3,23 @@
 <RCC version="1.0">
     <qresource>
         <file>style.qss</file>
+        <file>startWindow.qss</file>
         <file>icon.png</file>
+        <file>board.svg</file>
+        <file>bp.svg</file>
+        <file>bc.svg</file>
+        <file>br.svg</file>
+        <file>bn.svg</file>
+        <file>bb.svg</file>
+        <file>ba.svg</file>
+        <file>bk.svg</file>
+        <file>rp.svg</file>
+        <file>rc.svg</file>
+        <file>rr.svg</file>
+        <file>rn.svg</file>
+        <file>rb.svg</file>
+        <file>ra.svg</file>
+        <file>rk.svg</file>
     </qresource>
 
 </RCC>
