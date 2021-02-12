@@ -5,6 +5,7 @@
         <file>style.qss</file>
         <file>startWindow.qss</file>
         <file>icon.png</file>
+        <file>background.png</file>
         <file>board.svg</file>
         <file>blank.svg</file>
         <file>bp.svg</file>

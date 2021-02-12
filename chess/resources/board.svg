@@ -2,11 +2,8 @@
     <g id="Group_23" data-name="Group 23" transform="translate(-50 -50)">
         <rect id="Rectangle_74" data-name="Rectangle 74" width="900" height="1000" transform="translate(50 50)"
               fill="#fff"/>
-        <g id="Rectangle_73" data-name="Rectangle 73" transform="translate(90 90)" fill="#fff" stroke="#000"
-           stroke-width="1">
-            <rect width="820" height="920" stroke="none"/>
-            <rect x="0.5" y="0.5" width="819" height="919" fill="none"/>
-        </g>
+        <rect id="Rectangle_73" data-name="Rectangle 73" width="820" height="920" transform="translate(90 90)"
+              fill="#fff" stroke="#000" stroke-width="2"/>
         <g id="Group_1" data-name="Group 1">
             <rect id="Rectangle_1" data-name="Rectangle 1" width="100" height="100" transform="translate(100 100)"
                   fill="#fff" stroke="#000" stroke-width="2"/>

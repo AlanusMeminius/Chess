@@ -32,7 +32,7 @@ namespace Ui {
         std::map<std::pair<int, QString>, QPushButton *> modeList;
         QProgressBar *progressBar;
         QLabel *loadingLabel;
-        QLabel *createdLabel;
+//        QLabel *createdLabel;
         QTimer *timer;
     public:
         StartUpWindow() :
@@ -43,7 +43,7 @@ namespace Ui {
                 horizontalLayoutWidget(new QWidget(frame)),
                 progressBar(new QProgressBar(frame)),
                 loadingLabel(new QLabel(frame)),
-                createdLabel(new QLabel(frame)),
+//                createdLabel(new QLabel(frame)),
                 horizontalLayout(new QHBoxLayout(horizontalLayoutWidget)) {
             this->resize(680, 400);
             setWindowIcon(QPixmap(":/icon.png"));
@@ -83,7 +83,7 @@ namespace Ui {
             titleFont.setPointSize(40);
             // title
             titleLabel->setText(tr("\344\270\255\345\233\275<strong>\350\261\241\346\243\213</strong>"));
-            titleLabel->setGeometry(QRect(-3, 50, 661, 61));
+            titleLabel->setGeometry(QRect(190, 50, 280, 65));
             titleLabel->setFont(titleFont);
             titleLabel->setAlignment(Qt::AlignCenter);
 
@@ -98,22 +98,22 @@ namespace Ui {
 
             // progress bar
             progressBar->setObjectName(QString::fromUtf8("progressBar"));
-            progressBar->setGeometry(QRect(60, 300, 531, 23));
+            progressBar->setGeometry(QRect(60, 250, 531, 23));
             progressBar->setValue(0);
 
             // loading label
             loadingLabel->setObjectName(QString::fromUtf8("loadingLabel"));
-            loadingLabel->setGeometry(QRect(0, 330, 661, 21));
+            loadingLabel->setGeometry(QRect(272, 280, 100, 21));
             loadingLabel->setFont(smallFont);
             loadingLabel->setAlignment(Qt::AlignCenter);
             loadingLabel->setText("WELCOME");
 
-            createdLabel->setText(
-                    tr(R"(<html><head/><body><p align="right"><span style=" font-size:10pt;">Created: Luke</span></p></body></html>)"));
-            createdLabel->setObjectName(QString::fromUtf8("createdLabel"));
-            createdLabel->setGeometry(QRect(10, 350, 641, 21));
-            createdLabel->setFont(smallFont);
-            createdLabel->setAlignment(Qt::AlignCenter);
+//            createdLabel->setText(
+//                    tr(R"(<html><head/><body><p align="right"><span style=" font-size:10pt;">Created: Luke </span></p></body></html>)"));
+//            createdLabel->setObjectName(QString::fromUtf8("createdLabel"));
+//            createdLabel->setGeometry(QRect(560, 350, 90, 21));
+//            createdLabel->setFont(smallFont);
+//            createdLabel->setAlignment(Qt::AlignCenter);
         }
 
     public slots:
