@@ -66,16 +66,10 @@ void Application::_check_second_step(int &pos) {
 }
 
 bool Application::_check_strategy(int &pos) {
-    Strategy *strategy = StrategyCreator::createStrategy(pieces_[pos]->role_);
-    bool is_movable_;
-//    if (strategy != nullptr) {
-    is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
+    Strategy *strategy = StrategyCreator::createStrategy(pieces_[previous_select_]->role_);
+    bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
     delete strategy;
-    qDebug() << is_movable_;
     return is_movable_;
-//    } else {
-//         这里怎么处理
-//    }
 }
 
 void Application::_move_pieces(int &previous, int &current) {
