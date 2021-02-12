@@ -10,7 +10,8 @@ bool AdvisorsStrategy::is_movable(int &previous, int &current, std::vector<std::
      * 1. 列出所有可移动位置
      * 2. 排除己方棋子占据的位置
      * */
-    return false;
+    std::vector possoble_vector_ = possible_[pieces[previous]->camp_][previous];
+    return std::find(possoble_vector_.begin(), possoble_vector_.end(), current) != possoble_vector_.end();
 }
 
 bool BishopsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &pieces) {

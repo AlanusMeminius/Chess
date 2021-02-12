@@ -43,6 +43,7 @@ void Application::_init_pieces() {
 void Application::_check_first_step(int &pos) {
     if (_check_role(pos)) {
         if (_check_camp(pos)) {
+            qDebug() << pos;
             previous_select_ = pos;
             /*TODO 标记棋子，改变棋子外观*/
             is_first_step_ = !is_first_step_;
@@ -66,27 +67,27 @@ void Application::_check_second_step(int &pos) {
 
 bool Application::_check_strategy(int &pos) {
     Strategy *strategy = StrategyCreator::createStrategy(pieces_[pos]->role_);
-    if (strategy != nullptr) {
-        is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
-        delete strategy;
-        return is_movable_;
-    } else {
-        // 这里怎么处理
-    }
+    bool is_movable_;
+//    if (strategy != nullptr) {
+    is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
+    delete strategy;
+    qDebug() << is_movable_;
+    return is_movable_;
+//    } else {
+//         这里怎么处理
+//    }
 }
 
 void Application::_move_pieces(int &previous, int &current) {
     is_first_step_ = !is_first_step_;
     current_camp_ = !current_camp_;
-    piece_widgets_[current]->load(piece_pic_[pieces_[previous]->camp_][pieces_[previous]->role_]);
 
-//    _load_piece_svg(piece_widgets_[current], pieces_[previous]);
-//    piece_widgets_[current]->logicPiece->role_ = pieces_[previous]->role_;
-//    piece_widgets_[current]->logicPiece->camp_ = pieces_[previous]->camp_;
-    pieces_[current]->role_ = pieces_[previous]->role_;
-    pieces_[current]->camp_ = pieces_[previous]->camp_;
+    piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
 
-    piece_widgets_[previous]->logicPiece->role_ = 7;
+    pieces_[current]->role_ = _camp(previous);
+    pieces_[current]->camp_ = _role(previous);
+
+    pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
 

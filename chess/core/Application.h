@@ -23,7 +23,6 @@ private:
     bool is_first_step_ = true;
     int previous_select_ = -1;
     bool current_camp_ = true;
-    bool is_movable_ = false;
 
 private:
     Ui::BaseWindow *ui;
@@ -51,6 +50,10 @@ private:
     inline bool _check_role(int &pos) const { return (pieces_[pos]->role_ < 7); }
 
     inline bool _check_camp(int &pos) const { return (pieces_[pos]->camp_ == current_camp_); }
+
+    inline bool _camp(int &pos) { return pieces_[pos]->camp_; }
+
+    inline int _role(int &pos) { return pieces_[pos]->role_; }
 
 private:
     /*

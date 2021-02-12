@@ -1,6 +1,7 @@
 #ifndef CHESS_STRATEGY_H
 #define CHESS_STRATEGY_H
 
+#include <map>
 #include <vector>
 #include "Piece.h"
 
@@ -18,13 +19,24 @@ public:
 
 class AdvisorsStrategy : public Strategy {
 private:
-    std::pair<std::vector<int>, std::vector<int>> possible_{
-            {3,  5,  13, 21, 23},
-            {66, 68, 76, 84, 86}};
-private:
-//    void _take_out(int &pos) {
-//        if ()
-//    }
+    std::map<bool, std::map<int, std::vector<int>>> possible_{
+            {false, {
+                            {3,  {13}},
+                            {5,  {13}},
+                            {13, {3,  5,  21, 23}},
+                            {21, {13}},
+                            {23, {13}}
+                    },
+            },
+            {true,  {
+                            {66, {76}},
+                            {68, {76}},
+                            {76, {66, 68, 84, 86}},
+                            {84, {76}},
+                            {86, {76}}
+                    },
+            }
+    };
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
