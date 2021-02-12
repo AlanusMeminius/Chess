@@ -1,0 +1,32 @@
+QFrame {
+color: rgb(255, 249, 247);
+background-color: #4C566A;
+background-image:  url(":/background.png");
+border-radius:10px;
+}
+
+QPushButton {
+font: bold;
+color: #E5E9F0;
+background-color: rgba(149, 90, 90, 200);
+border: none;
+border-radius:7px;
+
+}
+
+QProgressBar {
+background-color: rgba(67, 76, 94, 80);
+color: #D8DEE9;
+border-style: none;
+border-radius:10px;
+text-align:center;
+}
+
+QProgressBar::chunk {
+border-radius:10px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0.369, x2:1, y2:0.727, stop:0 rgba(0, 135, 202, 255), stop:1 rgba(67, 92, 255, 255));
+}
+
+loadingLabel {
+background-color: rgba(149, 90, 90, 50);
+}

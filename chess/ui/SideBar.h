@@ -8,144 +8,139 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QListWidget>
 
-class VerticalSplitLine : public QWidget {
-public:
-    explicit VerticalSplitLine(QVBoxLayout *layout, const QString &objName) {
-        setMinimumHeight(2);
-        setObjectName(objName);
-        layout->addWidget(this);
-    }
-};
+QT_BEGIN_NAMESPACE
 
-class CustomLabel : public QLabel {
-public:
-    CustomLabel(
-            QVBoxLayout *layout, const QString &objName, const QString &label, const int &minimumHeight) {
-        setText(label);
-        setObjectName(objName);
-        setMinimumHeight(minimumHeight);
-        layout->addWidget(this);
-    }
-};
+namespace Ui {
+    class CustomLabel : public QLabel {
+    public:
+        CustomLabel(
+                QVBoxLayout *layout, const QString &objName, const QString &label, const int &minimumHeight) {
+            setText(label);
+            setObjectName(objName);
+            setMinimumHeight(minimumHeight);
+            layout->addWidget(this);
+        }
+    };
 
-class BoldFont : public QFont {
-public:
-    BoldFont() {
-        this->setPixelSize(13);
-        this->setBold(true);
-    }
-};
+    class SideBar : public QWidget {
+        Q_OBJECT
 
-class SideBar : public QWidget {
-Q_OBJECT
+    private:
+        QFont boldFont;
+    public:
+        QVBoxLayout *sideBarMainLayout;
+        QHBoxLayout *sideBarLayout;
+        QWidget *horizontalSplitLine;
+        QLabel *timeRecordLabel;
+        QLabel *timeRecord;
+        QHBoxLayout *firstBtnLayout;
 
-private:
-    BoldFont boldFont;
-public:
-    QVBoxLayout *sideBarMainLayout;
-    QHBoxLayout *sideBarLayout;
-    QWidget *horizontalSplitLine;
-    QLabel *timeRecordLabel;
-    QLabel *timeRecord;
-    QHBoxLayout *firstBtnLayout;
-    QPushButton *restoreBtn;
-    QPushButton *startStopBtn;
+        QHBoxLayout *secondBtnLayout;
+        QWidget *firstVerticalSplitLine;
+        CustomLabel *stepHistoryLabel;
+        QListWidget *stepHistoryList;
+        QPushButton *backBtn;
 
-    QHBoxLayout *secondBtnLayout;
-    VerticalSplitLine *firstVerticalSplitLine;
-    CustomLabel *stepHistoryLabel;
-    QListWidget *stepHistoryList;
-    QPushButton *backBtn;
+        CustomLabel *fightHistoryLabel;
+        QWidget *secondVerticalSplitLine;
+        QListWidget *fightHistoryList;
 
-    CustomLabel *fightHistoryLabel;
-    VerticalSplitLine *secondVerticalSplitLine;
-    QListWidget *fightHistoryList;
+    public:
+        explicit SideBar() {
+            // set main layout
+            sideBarLayout = new QHBoxLayout;
+            this->setLayout(sideBarLayout);
 
-public:
-    explicit SideBar() {
-        // set main layout
-        sideBarLayout = new QHBoxLayout;
-        this->setLayout(sideBarLayout);
+            // set horizontal split line
+            horizontalSplitLine = new QWidget;
+            horizontalSplitLine->setObjectName("horizontalSplitLine");
+            horizontalSplitLine->setMinimumWidth(2);
+            sideBarLayout->addWidget(horizontalSplitLine);
+            sideBarLayout->addSpacing(10);
 
-        // set horizontal split line
-        horizontalSplitLine = new QWidget;
-        horizontalSplitLine->setObjectName("horizontalSplitLine");
-        horizontalSplitLine->setMinimumWidth(2);
-        sideBarLayout->addWidget(horizontalSplitLine);
-        sideBarLayout->addSpacing(10);
+            // set side bar main layout
+            sideBarMainLayout = new QVBoxLayout;
+            sideBarLayout->addLayout(sideBarMainLayout);
 
-        // set side bar main layout
-        sideBarMainLayout = new QVBoxLayout;
-        sideBarLayout->addLayout(sideBarMainLayout);
+            // add time record label
+            timeRecordLabel = new CustomLabel(
+                    sideBarMainLayout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
+            );
+            timeRecordLabel->setFont(boldFont);
 
-        // add time record label
-        timeRecordLabel = new CustomLabel(
-                sideBarMainLayout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
-        );
-        timeRecordLabel->setFont(boldFont);
+            // add time widget
+            timeRecord = new CustomLabel(
+                    sideBarMainLayout, "timeRecord", "this is time", 30
+            );
 
-        // add time widget
-        timeRecord = new CustomLabel(
-                sideBarMainLayout, "timeRecord", "this is time", 30
-        );
+            // add btn
+            firstBtnLayout = new QHBoxLayout;
+            firstBtnLayout->setObjectName(QString::fromUtf8("firstBtnLayout"));
+            firstBtnLayout->setContentsMargins(10, 10, 10, 10);
+            sideBarMainLayout->addLayout(firstBtnLayout);
 
-        // add btn
-        firstBtnLayout = new QHBoxLayout;
-        firstBtnLayout->setObjectName(QString::fromUtf8("firstBtnLayout"));
-        firstBtnLayout->setContentsMargins(10, 10, 10, 10);
-        sideBarMainLayout->addLayout(firstBtnLayout);
+            std::map<QString, QPushButton *> btnList{
+                    {"startStopBtn", new QPushButton},
+                    {"restoreBtn",   new QPushButton}
+            };
+            for (auto &item : btnList) {
+                item.second = new QPushButton(item.first);
+                item.second->setObjectName(item.first);
+                item.second->setMinimumHeight(25);
+                firstBtnLayout->addWidget(item.second);
+            };
+            btnList["startStopBtn"]->setText(tr("开始"));
+            btnList["restoreBtn"]->setText(tr("重置"));
 
-        std::map<QString, QPushButton *> btnList{
-                {"startStopBtn", startStopBtn},
-                {"restoreBtn",   restoreBtn}
-        };
-        for (auto &item : btnList) {
-            item.second = new QPushButton(item.first);
-            item.second->setObjectName(item.first);
-            item.second->setMinimumHeight(25);
-            firstBtnLayout->addWidget(item.second);
-        };
-        btnList["startStopBtn"]->setText("开始");
-        btnList["restoreBtn"]->setText("重置");
+            // add split line
+            firstVerticalSplitLine = new QWidget;
+            firstVerticalSplitLine->setObjectName("firstVerticalSplitLine");
+            firstVerticalSplitLine->setMinimumHeight(2);
+            sideBarMainLayout->addWidget(firstVerticalSplitLine);
 
-        // add split line
-        firstVerticalSplitLine = new VerticalSplitLine(sideBarMainLayout, "firstVerticalSplitLine");
-        stepHistoryLabel = new CustomLabel(
-                sideBarMainLayout, "stepHistoryLabel", "着法记录", 30
-        );
-        stepHistoryLabel->setFont(boldFont);
+            stepHistoryLabel = new CustomLabel(
+                    sideBarMainLayout, "stepHistoryLabel", "着法记录", 30
+            );
+            boldFont.setPointSize(10);
+            stepHistoryLabel->setFont(boldFont);
 
-        // add step history list
-        stepHistoryList = new QListWidget;
-        stepHistoryList->setObjectName("stepHistoryList");
-        sideBarMainLayout->addWidget(stepHistoryList);
+            // add step history list
+            stepHistoryList = new QListWidget;
+            stepHistoryList->setObjectName("stepHistoryList");
+            sideBarMainLayout->addWidget(stepHistoryList);
 
-        // add btn
-        secondBtnLayout = new QHBoxLayout;
-        secondBtnLayout->setObjectName(QString::fromUtf8("firstBtnLayout"));
-        secondBtnLayout->setContentsMargins(10, 10, 10, 10);
-        sideBarMainLayout->addLayout(secondBtnLayout);
+            // add back btn
+            secondBtnLayout = new QHBoxLayout;
+            secondBtnLayout->setObjectName(QString::fromUtf8("firstBtnLayout"));
+            secondBtnLayout->setContentsMargins(10, 10, 10, 10);
+            sideBarMainLayout->addLayout(secondBtnLayout);
 
-        backBtn = new QPushButton;
-        backBtn->setObjectName("backBtn");
-        backBtn->setText("悔棋");
-        backBtn->setMinimumHeight(25);
-        secondBtnLayout->addWidget(backBtn);
+            backBtn = new QPushButton("悔棋");
+            backBtn->setObjectName("backBtn");
+            backBtn->setMinimumHeight(25);
+            secondBtnLayout->addWidget(backBtn);
 
-        // add split line
-        secondVerticalSplitLine = new VerticalSplitLine(sideBarMainLayout, "secondVerticalSplitLine");
-        fightHistoryLabel = new CustomLabel(
-                sideBarMainLayout, "fightHistoryLabel", "对战记录", 30
-        );
-        fightHistoryLabel->setFont(boldFont);
+            // add split line
+            secondVerticalSplitLine = new QWidget;
+            secondVerticalSplitLine->setObjectName("secondVerticalSplitLine");
+            secondVerticalSplitLine->setMinimumHeight(2);
 
-        // add fight history list
-        fightHistoryList = new QListWidget;
-        fightHistoryList->setObjectName("fightHistoryList");
-        sideBarMainLayout->addWidget(fightHistoryList);
+            sideBarMainLayout->addWidget(secondVerticalSplitLine);
+            fightHistoryLabel = new CustomLabel(
+                    sideBarMainLayout, "fightHistoryLabel", "对战记录", 30
+            );
+            fightHistoryLabel->setFont(boldFont);
 
-    }
+            // add fight history list
+            fightHistoryList = new QListWidget;
+            fightHistoryList->setObjectName("fightHistoryList");
+            sideBarMainLayout->addWidget(fightHistoryList);
 
-};
+        }
+
+    };
+
+}
+QT_END_NAMESPACE
 
 #endif //CHESS_SIDEBAR_H

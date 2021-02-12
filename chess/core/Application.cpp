@@ -1,111 +1,86 @@
 #include "Application.h"
 
-Application::Application(int index) : ui(new BaseWindow), engine(new Engine(index)) {
-    engine->choose_mode();
-    _init_pieces();
-}
 
-void Application::show_window() const {
-    ui->show();
+Application::Application(int index) : ui(new Ui::BaseWindow), mode_(index) {
+    _init_pieces();
+    qDebug() << mode_;
 }
 
 Application::~Application() {
     delete ui;
-    delete engine;
+}
+
+void Application::show_window() const {
+    ui->showMainWindow();
 }
 
 void Application::_init_pieces() {
-    for (auto &piece : engine->pieces_) {
-        pieceWidgets_.push_back(new PieceWidget(piece));
-        PieceWidget *p = pieceWidgets_.back();
+    /*
+     * 根据初始棋盘编码得到逻辑棋子vector
+     * */
+    int index = 0;
+    for (const auto &item : init_chess_board_) {
+        if (!ispunct(item)) {
+            board_.emplace_back(item);
+            pieces_.push_back(std::make_shared<Piece>(item, isupper(item) != 0, index));
+            index++;
+        }
+    }
+    /*
+     * 根据逻辑棋子vector，初始化得到界面棋子vector
+     * */
+    for (auto &piece : pieces_) {
+        piece_widgets_.push_back(new Ui::PieceWidget(piece));
+        Ui::PieceWidget *p = piece_widgets_.back();
         ui->chessBoard->boardLayout->addWidget(p, piece->pos_ / 9, piece->pos_ % 9);
-        connect(p, &PieceWidget::getPos, this, &Application::piece_click_event);
+        if (piece->role_ < 7)
+            _load_piece_svg(p, piece);
+        connect(p, &Ui::PieceWidget::getPos, this, &Application::piece_click_event);
     }
 }
-
-bool Application::_check_role(int &pos) const {
-    return (engine->pieces_[pos]->role_ < 9);
-}
-
-bool Application::_check_camp(int &pos) const {
-    return (engine->pieces_[pos]->camp_ == current_camp_);
-}
-
-/*
- * // 第一次选棋子
- * - 不是棋子位置 或是对方棋子-> pass
- * - 是我方棋子 -> highlight, flag
- *
- * // 第二次选要走的位置
- * - 是我方棋子 -> 更改高亮
- * - 其他位置，搜索移动策略，检查可行性
- *      - 可以移动，移动棋子，flag
- *      - 不可移动，status bar-msg
- * */
 
 void Application::_check_first_step(int &pos) {
     if (_check_role(pos)) {
         if (_check_camp(pos)) {
-//            qDebug() << "current camp: " << current_camp_ << ", select: " << pos;
-            ui->sendMsg(tr("select:  ") + QString(static_cast<char16_t>(pos)));
-            pieceWidgets_[pos]->HighLightPiece();
+            ui->sendMsg(tr("选中 ") + _pos_to_character(pos));
             previous_select_ = pos;
+            /*TODO 标记棋子，改变棋子外观*/
             is_first_step_ = !is_first_step_;
         } else {
-//            qDebug() << "Now turn to other side";
-            ui->sendMsg(tr("Now turn to other side"));
+            ui->sendMsg(tr("现在归对方下棋"));
         }
     }
 }
 
 void Application::_check_second_step(int &pos) {
-    if (_check_role(pos)) {
-        if (_check_camp(pos)) {
-//            qDebug() << "change: " << previous_select_ << " to " << pos;
-            ui->sendMsg(
-                    tr("change piece from  ") +
-                    QString(static_cast<wchar_t>(previous_select_)) +
-                    tr("  to  ") +
-                    QString(static_cast<wchar_t>(pos))
-            );
-            this->_change_highlight(previous_select_, pos);
-        } else {
-            ui->sendMsg(tr("do not select the other side piece"));
-        }
+    if (_check_role(pos) && _check_camp(pos)) {
+        ui->sendMsg(tr("更改棋子 ") + _pos_to_character(pos) +
+                    tr(" 为 ") + _pos_to_character(previous_select_));
+        /*TODO 更改棋子高亮*/
     } else {
-        if (engine->check_strategy(pos)) {
-//            qDebug() << "move: " << previous_select_ << " to " << pos;
-            ui->sendMsg(
-                    tr("move piece from  ") +
-                    QString(static_cast<wchar_t>(previous_select_)) +
-                    tr("  to  ") +
-                    QString(static_cast<wchar_t>(pos))
-            );
-            this->_move_pieces(previous_select_, pos);
-            is_first_step_ = !is_first_step_;
-            current_camp_ = !current_camp_;
+        if (_check_strategy(pos)) {
+            ui->sendMsg(tr("移动棋子") + _pos_to_character(previous_select_) +
+                        tr(" 到 ") + _pos_to_character(pos));
+            _move_pieces(previous_select_, pos);
         } else {
-            ui->sendMsg(tr("can not move"));
+            ui->sendMsg(tr("不能移动"));
         }
     }
 }
 
-
-void Application::piece_click_event(int pos) {
-    if (is_first_step_) {
-        _check_first_step(pos);
-    } else {
-        _check_second_step(pos);
-    }
-}
-
-void Application::_change_highlight(int &previous, int &current) {
-    pieceWidgets_[previous]->ReverseHighLight();
-    pieceWidgets_[current]->HighLightPiece();
+bool Application::_check_strategy(int &pos) {
+    return true;
 }
 
 void Application::_move_pieces(int &previous, int &current) {
-    // ...
+    is_first_step_ = !is_first_step_;
+    current_camp_ = !current_camp_;
 
-    //engine->update_representation(current);
+    _load_piece_svg(piece_widgets_[current], pieces_[previous]);
+    piece_widgets_[current]->logicPiece->role_ = pieces_[previous]->role_;
+    piece_widgets_[current]->logicPiece->camp_ = pieces_[previous]->camp_;
+
+    piece_widgets_[previous]->logicPiece->role_ = 7;
+    piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
+
