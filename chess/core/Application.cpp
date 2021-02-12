@@ -34,7 +34,8 @@ void Application::_init_pieces() {
         Ui::PieceWidget *p = piece_widgets_.back();
         ui->chessBoard->boardLayout->addWidget(p, piece->pos_ / 9, piece->pos_ % 9);
         if (piece->role_ < 7)
-            _load_piece_svg(p, piece);
+            p->load(piece_pic_[piece->camp_][piece->role_]);
+//            _load_piece_svg(p, piece);
         connect(p, &Ui::PieceWidget::getPos, this, &Application::piece_click_event);
     }
 }
@@ -42,7 +43,6 @@ void Application::_init_pieces() {
 void Application::_check_first_step(int &pos) {
     if (_check_role(pos)) {
         if (_check_camp(pos)) {
-            ui->sendMsg(tr("选中 ") + _pos_to_character(pos));
             previous_select_ = pos;
             /*TODO 标记棋子，改变棋子外观*/
             is_first_step_ = !is_first_step_;
@@ -54,13 +54,9 @@ void Application::_check_first_step(int &pos) {
 
 void Application::_check_second_step(int &pos) {
     if (_check_role(pos) && _check_camp(pos)) {
-        ui->sendMsg(tr("更改棋子 ") + _pos_to_character(pos) +
-                    tr(" 为 ") + _pos_to_character(previous_select_));
         /*TODO 更改棋子高亮*/
     } else {
         if (_check_strategy(pos)) {
-            ui->sendMsg(tr("移动棋子") + _pos_to_character(previous_select_) +
-                        tr(" 到 ") + _pos_to_character(pos));
             _move_pieces(previous_select_, pos);
         } else {
             ui->sendMsg(tr("不能移动"));
@@ -69,16 +65,26 @@ void Application::_check_second_step(int &pos) {
 }
 
 bool Application::_check_strategy(int &pos) {
-    return true;
+    Strategy *strategy = StrategyCreator::createStrategy(pieces_[pos]->role_);
+    if (strategy != nullptr) {
+        is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
+        delete strategy;
+        return is_movable_;
+    } else {
+        // 这里怎么处理
+    }
 }
 
 void Application::_move_pieces(int &previous, int &current) {
     is_first_step_ = !is_first_step_;
     current_camp_ = !current_camp_;
+    piece_widgets_[current]->load(piece_pic_[pieces_[previous]->camp_][pieces_[previous]->role_]);
 
-    _load_piece_svg(piece_widgets_[current], pieces_[previous]);
-    piece_widgets_[current]->logicPiece->role_ = pieces_[previous]->role_;
-    piece_widgets_[current]->logicPiece->camp_ = pieces_[previous]->camp_;
+//    _load_piece_svg(piece_widgets_[current], pieces_[previous]);
+//    piece_widgets_[current]->logicPiece->role_ = pieces_[previous]->role_;
+//    piece_widgets_[current]->logicPiece->camp_ = pieces_[previous]->camp_;
+    pieces_[current]->role_ = pieces_[previous]->role_;
+    pieces_[current]->camp_ = pieces_[previous]->camp_;
 
     piece_widgets_[previous]->logicPiece->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
