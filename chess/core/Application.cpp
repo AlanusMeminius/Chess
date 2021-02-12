@@ -81,6 +81,6 @@ void Application::_move_pieces(int &previous, int &current) {
     piece_widgets_[current]->logicPiece->camp_ = pieces_[previous]->camp_;
 
     piece_widgets_[previous]->logicPiece->role_ = 7;
-    piece_widgets_[previous]->hide();
+    piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
 

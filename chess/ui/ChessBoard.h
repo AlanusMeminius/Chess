@@ -28,7 +28,7 @@ namespace Ui {
         void getPos(int);
 
     protected:
-        void mousePressEvent(QMouseEvent *) { emit getPos(logicPiece->pos_); }
+        [[maybe_unused]] void mousePressEvent(QMouseEvent *) override { emit getPos(logicPiece->pos_); }
     };
 
     /*
