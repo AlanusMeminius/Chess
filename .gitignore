@@ -341,7 +341,5 @@ healthchecksdb
 
 *.vcxproj*
 .idea
-chess/CMakeLists.txt
 cmake-build-debug
 cmake-build-release
-/qt.natvis
