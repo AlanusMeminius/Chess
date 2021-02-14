@@ -1,6 +1,7 @@
 #ifndef CHESS_APPLICATION_H
 #define CHESS_APPLICATION_H
 
+#include <QFile>
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
 
@@ -47,13 +48,13 @@ private:
     /*
      * 帮助函数，重用
      * */
-    inline bool _check_role(int &pos) const { return (pieces_[pos]->role_ < 7); }
+    inline bool _check_role(int &pos) const { return (_role(pos) < 7); }
 
-    inline bool _check_camp(int &pos) const { return (pieces_[pos]->camp_ == current_camp_); }
+    inline bool _check_camp(int &pos) const { return (_camp(pos) == current_camp_); }
 
-    inline bool _camp(int &pos) { return pieces_[pos]->camp_; }
+    inline bool _camp(int &pos) const { return pieces_[pos]->camp_; }
 
-    inline int _role(int &pos) { return pieces_[pos]->role_; }
+    inline int _role(int &pos) const { return pieces_[pos]->role_; }
 
 private:
     /*
@@ -62,6 +63,8 @@ private:
     void _check_first_step(int &);
 
     void _check_second_step(int &);
+
+    void _highlight(int &);
 
     bool _check_strategy(int &);
 

@@ -35,7 +35,6 @@ void Application::_init_pieces() {
         ui->chessBoard->boardLayout->addWidget(p, piece->pos_ / 9, piece->pos_ % 9);
         if (piece->role_ < 7)
             p->load(piece_pic_[piece->camp_][piece->role_]);
-//            _load_piece_svg(p, piece);
         connect(p, &Ui::PieceWidget::getPos, this, &Application::piece_click_event);
     }
 }
@@ -45,8 +44,8 @@ void Application::_check_first_step(int &pos) {
         if (_check_camp(pos)) {
             qDebug() << pos;
             previous_select_ = pos;
-            /*TODO 标记棋子，改变棋子外观*/
             is_first_step_ = !is_first_step_;
+            _highlight(pos);
         } else {
             ui->sendMsg(tr("现在归对方下棋"));
         }
@@ -55,7 +54,7 @@ void Application::_check_first_step(int &pos) {
 
 void Application::_check_second_step(int &pos) {
     if (_check_role(pos) && _check_camp(pos)) {
-        /*TODO 更改棋子高亮*/
+        previous_select_ = pos;
     } else {
         if (_check_strategy(pos)) {
             _move_pieces(previous_select_, pos);
@@ -63,6 +62,17 @@ void Application::_check_second_step(int &pos) {
             ui->sendMsg(tr("不能移动"));
         }
     }
+}
+
+void Application::_highlight(int &pos) {
+    QFile file(piece_pic_[_camp(pos)][_role(pos)]);
+    file.open(QIODevice::ReadOnly);
+    QByteArray byteArray = file.readAll();
+    QString string = QString(byteArray);
+    string.replace(R"(stroke="#000" fill="#fda")", R"(stroke="#9c8c03" fill="#f5d442")");
+
+    QByteArray h_byteArray = string.toUtf8();
+    piece_widgets_[pos]->load(h_byteArray);
 }
 
 bool Application::_check_strategy(int &pos) {
@@ -78,8 +88,8 @@ void Application::_move_pieces(int &previous, int &current) {
 
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
 
-    pieces_[current]->role_ = _camp(previous);
-    pieces_[current]->camp_ = _role(previous);
+    pieces_[current]->role_ = _role(previous);
+    pieces_[current]->camp_ = _camp(previous);
 
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));

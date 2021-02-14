@@ -1,7 +1,7 @@
 #include "Strategy.h"
 
 bool GeneralsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return false;
+    return true;
 }
 
 bool AdvisorsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
@@ -10,22 +10,22 @@ bool AdvisorsStrategy::is_movable(int &previous, int &current, std::vector<std::
 }
 
 bool BishopsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &pieces) {
-    return false;
+    return true;
 }
 
 bool HorsesStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return false;
+    return true;
 }
 
 bool ChariotsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return false;
+    return true;
 }
 
 
 bool CannonsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return false;
+    return true;
 }
 
 bool SoldiersStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return false;
+    return true;
 }
