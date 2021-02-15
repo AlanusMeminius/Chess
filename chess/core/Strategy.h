@@ -47,6 +47,10 @@ public:
 };
 
 class BishopsStrategy : public Strategy {
+    std::map<bool, std::vector<int>> possible_{
+            {false, {2,  6,  18, 22, 26, 38, 42}},
+            {true,  {47, 51, 63, 67, 71, 83, 87}}
+    };
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
@@ -58,6 +62,19 @@ public:
 
 class ChariotsStrategy : public Strategy {
 public:
+    static bool check_blank(int &left, int &right, int times, std::vector<std::shared_ptr<Piece>> &pieces) {
+        if (left > right) {
+            int tmp = left;
+            right = left;
+            left = tmp;
+        }
+        for (int i = left + 1; i < right; i++) {
+            if (pieces[i * times]->role_ < 7)
+                return false;
+        }
+        return true;
+    }
+
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
 
@@ -67,6 +84,7 @@ public:
 };
 
 class SoldiersStrategy : public Strategy {
+
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
