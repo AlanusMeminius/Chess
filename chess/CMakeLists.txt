@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(Chess)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_PREFIX_PATH ${Qt_Path})
+set(CMAKE_PREFIX_PATH "D:/Qt/6.1.0/msvc2019_64")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)

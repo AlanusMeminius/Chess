@@ -64,14 +64,14 @@ private:
 
     void _check_second_step(int &);
 
-    void _highlight(int &);
-
     bool _check_strategy(int &);
 
     /*
      * ui界面改变
      * */
     void _init_pieces();
+
+    void _highlight(int &);
 
     void _move_pieces(int &, int &);
 };

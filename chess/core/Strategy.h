@@ -13,6 +13,11 @@ public:
 };
 
 class GeneralsStrategy : public Strategy {
+private:
+    std::map<bool, std::vector<int>> possible_{
+            {false, {3,  4,  5,  12, 13, 14, 21, 22, 23}},
+            {true,  {66, 67, 68, 75, 76, 78, 84, 85, 86}}
+    };
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
