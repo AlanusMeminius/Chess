@@ -1,7 +1,25 @@
 #include "Strategy.h"
 
-bool GeneralsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return true;
+/*
+ * 检查两个点是否在同一条直线上*/
+inline bool is_same_straight_line(int &a, int &b) {
+    return a / 9 == b / 9 || a % 9 == b % 9;
+}
+
+/*计算两个点在同一条直线上的距离*/
+inline int linear_distance(int &a, int &b) {
+    return (a / 9 != b / 9) ? abs(a / 9 - b / 9) : abs(a - b);
+}
+
+bool GeneralsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
+    if (current / 9 < 3 && 2 < current % 9 && current % 9 < 6)
+        return false;
+    else {
+        if (is_same_straight_line(previous, current)) {
+            if (linear_distance(previous, current) < 2)
+                return true;
+        }
+    }
 }
 
 bool AdvisorsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
