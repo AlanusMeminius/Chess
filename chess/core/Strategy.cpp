@@ -17,7 +17,7 @@ inline int linear_distance(int &a, int &b) {
 }
 
 bool GeneralsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
-    std::vector possible_vector_ = possible_[pieces[current]->camp_];
+    std::vector possible_vector_ = possible_[pieces[previous]->camp_];
     if (std::find(possible_vector_.begin(), possible_vector_.end(), current) != possible_vector_.end())
         return is_same_straight_line(previous, current) && linear_distance(previous, current) < 2;
     else
