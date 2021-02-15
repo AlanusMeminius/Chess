@@ -53,20 +53,23 @@ bool HorsesStrategy::is_movable(int &previous, int &current, std::vector<std::sh
 }
 
 bool ChariotsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
-    if (horizontal_distance(previous, current) < 1) {
-        return check_blank(previous, current, 1, pieces);
-    } else if (vertical_distance(previous, current) < 1) {
-        return check_blank(previous, current, 9, pieces);
-    } else
+    if (is_same_straight_line(previous, current)) {
+        for (int i = std::min(previous, current) + 1;
+             i < std::max(previous, current); i += (abs(current - previous) < 9) ? 1 : 9) {
+            if (pieces[i]->role_ < 7)
+                return false;
+        }
+        return true;
+    } else {
         return false;
+    }
 }
-
 
 bool CannonsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
     return true;
 }
 
 bool SoldiersStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
-    if (current / 9)
-        return true;
+//    if (current / 9)
+    return true;
 }
