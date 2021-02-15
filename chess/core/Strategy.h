@@ -62,19 +62,6 @@ public:
 
 class ChariotsStrategy : public Strategy {
 public:
-    static bool check_blank(int &left, int &right, int times, std::vector<std::shared_ptr<Piece>> &pieces) {
-        if (left > right) {
-            int tmp = left;
-            right = left;
-            left = tmp;
-        }
-        for (int i = left + 1; i < right; i++) {
-            if (pieces[i * times]->role_ < 7)
-                return false;
-        }
-        return true;
-    }
-
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
 
