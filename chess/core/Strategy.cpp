@@ -69,8 +69,18 @@ bool ChariotsStrategy::is_movable(int &previous, int &current, std::vector<std::
     }
 }
 
-bool CannonsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) {
-    return true;
+bool CannonsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
+    if (is_same_straight_line(previous, current)) {
+        int distance = abs(current - previous) < 9 ? 1 : 9;
+        int count = 0;
+        for (int i = std::min(previous, current) + distance; i < std::max(previous, current); i += distance) {
+            if (pieces[i]->role_ < 7)
+                count++;
+        }
+        return count == 1;
+    } else {
+        return false;
+    }
 }
 
 bool SoldiersStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
