@@ -13,6 +13,11 @@ public:
 };
 
 class GeneralsStrategy : public Strategy {
+private:
+    std::map<bool, std::vector<int>> possible_{
+            {false, {3,  4,  5,  12, 13, 14, 21, 22, 23}},
+            {true,  {66, 67, 68, 75, 76, 78, 84, 85, 86}}
+    };
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
@@ -42,6 +47,10 @@ public:
 };
 
 class BishopsStrategy : public Strategy {
+    std::map<bool, std::vector<int>> possible_{
+            {false, {2,  6,  18, 22, 26, 38, 42}},
+            {true,  {47, 51, 63, 67, 71, 83, 87}}
+    };
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };
@@ -62,6 +71,7 @@ public:
 };
 
 class SoldiersStrategy : public Strategy {
+
 public:
     bool is_movable(int &, int &, std::vector<std::shared_ptr<Piece>> &) override;
 };

@@ -42,7 +42,7 @@ void Application::_init_pieces() {
 void Application::_check_first_step(int &pos) {
     if (_check_role(pos)) {
         if (_check_camp(pos)) {
-            qDebug() << pos;
+            qDebug() << "first" << pos;
             previous_select_ = pos;
             is_first_step_ = !is_first_step_;
             _highlight(pos);
@@ -53,8 +53,14 @@ void Application::_check_first_step(int &pos) {
 }
 
 void Application::_check_second_step(int &pos) {
+    /*如果第二步选中自己的棋子，更改高亮，重新标记第一步的选择*/
     if (_check_role(pos) && _check_camp(pos)) {
+        qDebug() << "first" << pos;
+        /*取消高亮和中心加载高亮*/
+        piece_widgets_[previous_select_]->load(piece_pic_[_camp(previous_select_)][_role(previous_select_)]);
+        _highlight(pos);
         previous_select_ = pos;
+        /*如果不是自己的棋子，检测棋子的移动策略*/
     } else {
         if (_check_strategy(pos)) {
             _move_pieces(previous_select_, pos);
@@ -68,15 +74,16 @@ void Application::_highlight(int &pos) {
     QFile file(piece_pic_[_camp(pos)][_role(pos)]);
     file.open(QIODevice::ReadOnly);
     QByteArray byteArray = file.readAll();
+    // 读取svg文件为一个Qstring
     QString string = QString(byteArray);
+    // 替换颜色
     string.replace(R"(stroke="#000" fill="#fda")", R"(stroke="#9c8c03" fill="#f5d442")");
-
     QByteArray h_byteArray = string.toUtf8();
     piece_widgets_[pos]->load(h_byteArray);
 }
 
 bool Application::_check_strategy(int &pos) {
-    Strategy *strategy = StrategyCreator::createStrategy(pieces_[previous_select_]->role_);
+    Strategy *strategy = StrategyCreator::createStrategy(_role(previous_select_));
     bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
     delete strategy;
     return is_movable_;
