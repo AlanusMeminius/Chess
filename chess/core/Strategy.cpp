@@ -1,4 +1,5 @@
 #include "Strategy.h"
+#include <QDebug>
 
 /*计算横向的距离*/
 inline int horizontal_distance(int &a, int &b) { return abs(a / 9 - b / 9); }
@@ -54,8 +55,8 @@ bool HorsesStrategy::is_movable(int &previous, int &current, std::vector<std::sh
 
 bool ChariotsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
     if (is_same_straight_line(previous, current)) {
-        for (int i = std::min(previous, current) + 1;
-             i < std::max(previous, current); i += (abs(current - previous) < 9) ? 1 : 9) {
+        int distance = abs(current - previous) < 9 ? 1 : 9;
+        for (int i = std::min(previous, current) + distance; i < std::max(previous, current); i += distance) {
             if (pieces[i]->role_ < 7)
                 return false;
         }
