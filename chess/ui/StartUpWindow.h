@@ -150,7 +150,7 @@ public:
             connect(item.second, &QPushButton::clicked, this,
                     [this, item](int) { emit btnIndex(item.first.first); });
 
-        connect(this, SIGNAL(btnIndex(int)), this, SLOT(setUpMainWinwdow(int)));
+        connect(this, SIGNAL(btnIndex(int)), this, SLOT(setUpMainWindow(int)));
         startUpWindow->show();
     }
 
@@ -165,7 +165,7 @@ signals:
 
 public slots:
 
-    void setUpMainWinwdow(int select) {
+    void setUpMainWindow(int select) {
         application = new Application(select);
         if (startUpWindow->exec() == QDialog::Accepted)
             application->show_window();
