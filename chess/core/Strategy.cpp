@@ -77,7 +77,9 @@ bool CannonsStrategy::is_movable(int &previous, int &current, std::vector<std::s
             if (pieces[i]->role_ < 7)
                 count++;
         }
-        return count == 1;
+        if (pieces[current]->role_ < 7 && pieces[current]->camp_ != pieces[previous]->camp_)
+            return count == 1;
+        return count == 0;
     } else {
         return false;
     }
