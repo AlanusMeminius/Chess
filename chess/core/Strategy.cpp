@@ -1,20 +1,23 @@
 #include "Strategy.h"
-#include <QDebug>
 
-/*计算横向的距离*/
-inline int horizontal_distance(int &a, int &b) { return abs(a / 9 - b / 9); }
+inline int v_coordinate(int &a) { return a / 9; }
+
+inline int h_coordinate(int &a) { return a % 9; }
 
 /*计算纵向的距离*/
-inline int vertical_distance(int &a, int &b) { return abs(a % 9 - b % 9); }
+inline int v_distance(int &a, int &b) { return abs(v_coordinate(a) - v_coordinate(b)); }
+
+/*计算横向的距离*/
+inline int h_distance(int &a, int &b) { return abs(h_coordinate(a) - h_coordinate(b)); }
 
 /*检查两个点是否在同一条直线上*/
 inline bool is_same_straight_line(int &a, int &b) {
-    return (horizontal_distance(a, b) < 1 || vertical_distance(a, b) < 1);
+    return (v_distance(a, b) < 1 || h_distance(a, b) < 1);
 }
 
 /*计算两个点在同一条直线上的距离*/
 inline int linear_distance(int &a, int &b) {
-    return (horizontal_distance(a, b) > 0) ? horizontal_distance(a, b) : abs(a - b);
+    return (v_distance(a, b) > 0) ? v_distance(a, b) : abs(a - b);
 }
 
 bool GeneralsStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
@@ -43,10 +46,10 @@ bool BishopsStrategy::is_movable(int &previous, int &current, std::vector<std::s
 
 bool HorsesStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
     /*如果横向距离为1，竖直距离为2*/
-    if (horizontal_distance(previous, current) == 1 && vertical_distance(previous, current) == 2) {
+    if (v_distance(previous, current) == 1 && h_distance(previous, current) == 2) {
         return (previous % 9 > current % 9) ? pieces[previous - 1]->role_ > 6 : pieces[previous + 1]->role_ > 6;
         /*如果横向距离为2，竖直距离为1*/
-    } else if (horizontal_distance(previous, current) == 2 && vertical_distance(previous, current) == 1) {
+    } else if (v_distance(previous, current) == 2 && h_distance(previous, current) == 1) {
         return (previous / 9 > current / 9) ? pieces[previous - 9]->role_ > 6 : pieces[previous + 9]->role_ > 6;
     } else {
         return false;
@@ -71,6 +74,12 @@ bool CannonsStrategy::is_movable(int &, int &, std::vector<std::shared_ptr<Piece
 }
 
 bool SoldiersStrategy::is_movable(int &previous, int &current, std::vector<std::shared_ptr<Piece>> &pieces) {
-//    if (current / 9)
-    return true;
+    if (pieces[previous]->camp_ ? (previous / 9) > 4 : (previous / 9) < 5)
+        return current - previous == (pieces[previous]->camp_ ? -9 : 9);
+    else if (v_distance(previous, current) < 1)
+        return h_distance(previous, current) == 1;
+    else if (h_distance(previous, current) < 1)
+        return v_coordinate(previous) - v_coordinate(current) == (pieces[previous]->camp_ ? 1 : -1);
+    else
+        return false;
 }
