@@ -14,7 +14,7 @@ private:
             {false, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
             {true,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
     };
-    std::map<bool, std::vector<QString>> piece_character_{
+    [[maybe_unused]] std::map<bool, std::vector<QString>> piece_character_{
             {false, {"將", "士", "象", "馬", "車", "砲", "卒", "空白"}},
             {true,  {"帥", "仕", "相", "傌", "俥", "炮", "兵", "空白"}}
     };
@@ -62,6 +62,7 @@ private:
 
 private:
 
+    /*初始化*/
     void _init_logic_pieces();
 
     void _init_ui_pieces();
