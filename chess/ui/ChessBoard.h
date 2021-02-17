@@ -22,7 +22,7 @@ namespace Ui {
     public:
         CampHint() {
             hint = new QWidget(this);
-//            hint->setGeometry(QRect(0, height(), 3, 200));
+            hint->setGeometry(QRect(0, height(), 3, 200));
             hint->setObjectName("Hint");
 
             animation = new QPropertyAnimation;

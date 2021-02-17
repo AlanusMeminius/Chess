@@ -88,7 +88,7 @@ void Application::_highlight(int &pos) {
     QFile file(piece_pic_[_camp(pos)][_role(pos)]);
     file.open(QIODevice::ReadOnly);
     QByteArray byteArray = file.readAll();
-    // 读取svg文件为一个Qstring
+    // 读取svg文件为一个QString
     QString string = QString(byteArray);
     // 替换颜色
     string.replace(R"(stroke="#000" fill="#fda")", R"(stroke="#9c8c03" fill="#f5d442")");

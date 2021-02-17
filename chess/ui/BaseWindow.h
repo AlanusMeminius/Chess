@@ -73,16 +73,12 @@ namespace Ui {
         }
 
         void showMainWindow() {
-//            animation->stop();
-//            animation->setStartValue(0);
-//            animation->setEndValue(1);
-//            animation->start();
             show();
         }
 
         void sendMsg(const QString &msg) const {
-            QString messsage = tr(" Status Info | ") + msg;
-            statusBar->showMessage(messsage);
+            QString message = tr(" Status Info | ") + msg;
+            statusBar->showMessage(message);
         }
 
     };
