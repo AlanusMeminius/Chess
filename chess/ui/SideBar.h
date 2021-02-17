@@ -34,6 +34,7 @@ namespace Ui {
         QLabel *timeRecordLabel;
         QLabel *timeRecord;
         QHBoxLayout *firstBtnLayout;
+        std::map<QString, QPushButton *> btnList;
 
         QHBoxLayout *secondBtnLayout;
         QWidget *firstVerticalSplitLine;
@@ -79,7 +80,7 @@ namespace Ui {
             firstBtnLayout->setContentsMargins(10, 10, 10, 10);
             sideBarMainLayout->addLayout(firstBtnLayout);
 
-            std::map<QString, QPushButton *> btnList{
+            btnList = {
                     {"startStopBtn", new QPushButton},
                     {"restoreBtn",   new QPushButton}
             };

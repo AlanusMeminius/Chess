@@ -37,7 +37,10 @@ private slots:
         (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
     }
 
+    void restore_board();
+
 public:
+
     explicit Application(int index);
 
     ~Application() override;
@@ -45,6 +48,7 @@ public:
     void show_window() const;
 
 private:
+
     /*
      * 帮助函数，重用
      * */
@@ -57,6 +61,13 @@ private:
     inline int _role(int &pos) const { return pieces_[pos]->role_; }
 
 private:
+
+    void _init_logic_pieces();
+
+    void _init_ui_pieces();
+
+    void _init_btn_signal();
+
     /*
      * 下棋逻辑判断
      * */
@@ -69,8 +80,6 @@ private:
     /*
      * ui界面改变
      * */
-    void _init_pieces();
-
     void _highlight(int &);
 
     void _move_pieces(int &, int &);

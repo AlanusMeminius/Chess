@@ -2,7 +2,10 @@
 
 
 Application::Application(int index) : ui(new Ui::BaseWindow), mode_(index) {
-    _init_pieces();
+//    _init_pieces();
+    _init_logic_pieces();
+    _init_ui_pieces();
+    _init_btn_signal();
     qDebug() << mode_;
 }
 
@@ -14,7 +17,8 @@ void Application::show_window() const {
     ui->showMainWindow();
 }
 
-void Application::_init_pieces() {
+
+void Application::_init_logic_pieces() {
     /*
      * 根据初始棋盘编码得到逻辑棋子vector
      * */
@@ -26,6 +30,9 @@ void Application::_init_pieces() {
             index++;
         }
     }
+}
+
+void Application::_init_ui_pieces() {
     /*
      * 根据逻辑棋子vector，初始化得到界面棋子vector
      * */
@@ -70,6 +77,13 @@ void Application::_check_second_step(int &pos) {
     }
 }
 
+bool Application::_check_strategy(int &pos) {
+    Strategy *strategy = StrategyCreator::createStrategy(_role(previous_select_));
+    bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
+    delete strategy;
+    return is_movable_;
+}
+
 void Application::_highlight(int &pos) {
     QFile file(piece_pic_[_camp(pos)][_role(pos)]);
     file.open(QIODevice::ReadOnly);
@@ -80,13 +94,6 @@ void Application::_highlight(int &pos) {
     string.replace(R"(stroke="#000" fill="#fda")", R"(stroke="#9c8c03" fill="#f5d442")");
     QByteArray h_byteArray = string.toUtf8();
     piece_widgets_[pos]->load(h_byteArray);
-}
-
-bool Application::_check_strategy(int &pos) {
-    Strategy *strategy = StrategyCreator::createStrategy(_role(previous_select_));
-    bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
-    delete strategy;
-    return is_movable_;
 }
 
 void Application::_move_pieces(int &previous, int &current) {
@@ -101,4 +108,23 @@ void Application::_move_pieces(int &previous, int &current) {
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
+
+void Application::_init_btn_signal() {
+    connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore_board);
+
+}
+
+void Application::restore_board() {
+    for (int i = 0; i < piece_widgets_.size(); i++) {
+        pieces_[i] = std::make_shared<Piece>(board_[i], isupper(board_[i]) != 0, i);
+        piece_widgets_[i]->logicPiece = pieces_[i];
+        if (pieces_[i]->role_ < 7)
+            piece_widgets_[i]->load(piece_pic_[pieces_[i]->camp_][pieces_[i]->role_]);
+        else
+            piece_widgets_[i]->load(QString(":/blank.svg"));
+    }
+    is_first_step_ = true;
+    current_camp_ = true;
+}
+
 
