@@ -84,6 +84,8 @@ private:
     void _highlight(int &);
 
     void _move_pieces(int &, int &);
+
+    void _step_history(int &);
 };
 
 

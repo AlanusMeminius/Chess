@@ -12,6 +12,9 @@
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
+    /*
+     * 行进方阵营标记
+     * */
     class CampHint : public QWidget {
     Q_OBJECT
     private:

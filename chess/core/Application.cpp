@@ -2,7 +2,6 @@
 
 
 Application::Application(int index) : ui(new Ui::BaseWindow), mode_(index) {
-//    _init_pieces();
     _init_logic_pieces();
     _init_ui_pieces();
     _init_btn_signal();
@@ -115,20 +114,27 @@ void Application::_move_pieces(int &previous, int &current) {
 
 void Application::_init_btn_signal() {
     connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore_board);
-
 }
 
 void Application::restore_board() {
-    for (int i = 0; i < piece_widgets_.size(); i++) {
+    for (int i = 0; i < pieces_.size(); i++) {
+        // 逻辑棋子使用构造函数更新
         pieces_[i] = std::make_shared<Piece>(board_[i], isupper(board_[i]) != 0, i);
-        piece_widgets_[i]->logicPiece = pieces_[i];
         if (pieces_[i]->role_ < 7)
             piece_widgets_[i]->load(piece_pic_[pieces_[i]->camp_][pieces_[i]->role_]);
         else
             piece_widgets_[i]->load(QString(":/blank.svg"));
     }
+    // flag 重新初始化
     is_first_step_ = true;
     current_camp_ = true;
+}
+
+void Application::_step_history(int &current) {
+/*
+ * 两个棋子位置，*/
+
+    ui->sideBar->fightHistoryList->addItem("");
 }
 
 
