@@ -5,7 +5,7 @@ Application::Application(int index) : ui(new Ui::BaseWindow), mode_(index) {
 //    _init_pieces();
     _init_logic_pieces();
     _init_ui_pieces();
-    connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore_board);
+    _init_btn_signal();
     qDebug() << mode_;
 }
 
@@ -107,6 +107,11 @@ void Application::_move_pieces(int &previous, int &current) {
 
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
+}
+
+void Application::_init_btn_signal() {
+    connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore_board);
+
 }
 
 void Application::restore_board() {

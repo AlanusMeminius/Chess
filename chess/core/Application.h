@@ -66,6 +66,8 @@ private:
 
     void _init_ui_pieces();
 
+    void _init_btn_signal();
+
     /*
      * 下棋逻辑判断
      * */
