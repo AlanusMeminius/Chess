@@ -6,11 +6,11 @@ background-color: #ffffff;
 }
 
 #horizontalSplitLine, #firstVerticalSplitLine, #secondVerticalSplitLine {
-background-color: rgb(0, 170, 255);
+background-color: #DAA520;
 }
 
 #restoreBtn, #startStopBtn {
-background-color: #5E81AC;
+background-color: #CD853F;
 border: none;
 border-radius:4px;
 color: #E5E9F0;
@@ -26,4 +26,8 @@ color: #E5E9F0;
 #stepHistoryList, #fightHistoryList {
 border:none;
 padding:10px;
+}
+
+#Hint {
+background: rgb(255, 0, 0);
 }

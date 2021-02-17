@@ -22,15 +22,15 @@ namespace Ui {
     public:
         Ui::ChessBoard *chessBoard;
         Ui::SideBar *sideBar;
-        QLabel *statusLabel;
+        Ui::CampHint *campHint;
         QStatusBar *statusBar;
     public:
         BaseWindow() :
                 centralwidget(new QWidget(this)),
                 mainLayout(new QHBoxLayout),
-                chessBoard(new ChessBoard),
+                chessBoard(new Ui::ChessBoard),
                 sideBar(new Ui::SideBar),
-                statusLabel(new QLabel),
+                campHint(new Ui::CampHint),
                 statusBar(new QStatusBar),
                 animation(new QPropertyAnimation) {
             // set icon, windowSize, objectName
@@ -56,6 +56,9 @@ namespace Ui {
             mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
             centralwidget->setLayout(mainLayout);
 
+            mainLayout->addWidget(campHint);
+            campHint->setMinimumWidth(5);
+            campHint->setMaximumWidth(20);
             // add chess board
             chessBoard->setMinimumWidth(500);
             mainLayout->addWidget(chessBoard);

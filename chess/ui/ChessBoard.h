@@ -12,6 +12,41 @@
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
+    class CampHint : public QWidget {
+    Q_OBJECT
+    private:
+        QPropertyAnimation downAnimation;
+        QPropertyAnimation upAnimation;
+    public:
+//        QVBoxLayout *layout;
+        QWidget *hint;
+
+    public:
+        CampHint() {
+            hint = new QWidget(this);
+            hint->setGeometry(0, 0, 3, height() / 2);
+            hint->setObjectName("Hint");
+
+            downAnimation.setDuration(1000);
+            downAnimation.setStartValue(QRect(0, 0, 3, height() / 2));
+            downAnimation.setEndValue(QRect(0, height() / 2, 3, height() / 2));
+            downAnimation.setTargetObject(hint);
+
+            upAnimation.setDuration(1000);
+            upAnimation.setStartValue(QRect(0, height() / 2, 3, height() / 2));
+            upAnimation.setEndValue(QRect(0, 0, 3, height() / 2));
+            upAnimation.setTargetObject(hint);
+        }
+
+        void reverse_hint(bool &flag) {
+            if (!flag) {
+                downAnimation.start();
+            } else {
+                upAnimation.start();
+            }
+        }
+    };
+
     /*
      * 棋子控件，加载棋子图片
      * */
