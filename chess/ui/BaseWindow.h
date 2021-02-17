@@ -56,6 +56,7 @@ namespace Ui {
             mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
             centralwidget->setLayout(mainLayout);
 
+            // add camp hint
             mainLayout->addWidget(campHint);
             campHint->setMinimumWidth(5);
             campHint->setMaximumWidth(20);

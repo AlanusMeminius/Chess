@@ -15,34 +15,31 @@ namespace Ui {
     class CampHint : public QWidget {
     Q_OBJECT
     private:
-        QPropertyAnimation downAnimation;
-        QPropertyAnimation upAnimation;
+        QPropertyAnimation *animation;
     public:
-//        QVBoxLayout *layout;
         QWidget *hint;
 
     public:
         CampHint() {
             hint = new QWidget(this);
-            hint->setGeometry(0, 0, 3, height() / 2);
+//            hint->setGeometry(QRect(0, height(), 3, 200));
             hint->setObjectName("Hint");
 
-            downAnimation.setDuration(1000);
-            downAnimation.setStartValue(QRect(0, 0, 3, height() / 2));
-            downAnimation.setEndValue(QRect(0, height() / 2, 3, height() / 2));
-            downAnimation.setTargetObject(hint);
-
-            upAnimation.setDuration(1000);
-            upAnimation.setStartValue(QRect(0, height() / 2, 3, height() / 2));
-            upAnimation.setEndValue(QRect(0, 0, 3, height() / 2));
-            upAnimation.setTargetObject(hint);
+            animation = new QPropertyAnimation;
+            animation->setPropertyName(QByteArray("geometry"));
+            animation->setDuration(400);
+            animation->setTargetObject(hint);
         }
 
-        void reverse_hint(bool &flag) {
-            if (!flag) {
-                downAnimation.start();
+        void reverse(bool flag) {
+            if (flag) {
+                animation->setStartValue(QRect(0, height() / 2 - 200, 3, 200));
+                animation->setEndValue(QRect(0, height() / 2, 3, 200));
+                animation->start();
             } else {
-                upAnimation.start();
+                animation->setStartValue(QRect(0, height() / 2, 3, 200));
+                animation->setEndValue(QRect(0, height() / 2 - 200, 3, 200));
+                animation->start();
             }
         }
     };

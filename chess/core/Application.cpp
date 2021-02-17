@@ -100,7 +100,7 @@ void Application::_move_pieces(int &previous, int &current) {
     // 反转flag
     is_first_step_ = !is_first_step_;
     current_camp_ = !current_camp_;
-    ui->campHint->reverse_hint(current_camp_);
+    ui->campHint->reverse(current_camp_);
     // 选中位置加载之前选中的棋子
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
 
