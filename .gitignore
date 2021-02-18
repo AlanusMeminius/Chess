@@ -344,3 +344,4 @@ out
 .idea
 cmake-build-debug
 cmake-build-release
+/chess/build
