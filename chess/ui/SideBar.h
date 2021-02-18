@@ -2,6 +2,8 @@
 #ifndef CHESS_SIDEBAR_H
 #define CHESS_SIDEBAR_H
 
+#include <QTimer>
+#include <QTime>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
@@ -22,8 +24,18 @@ namespace Ui {
         }
     };
 
+    class TimeRecord : public QLabel {
+    public:
+        QTimer *qTimer;
+        QTime *qTime;
+    public:
+        TimeRecord() : qTime(new QTime), qTimer(new QTimer) {
+
+        }
+    };
+
     class SideBar : public QWidget {
-        Q_OBJECT
+    Q_OBJECT
 
     private:
         QFont boldFont;
@@ -108,6 +120,7 @@ namespace Ui {
             // add step history list
             stepHistoryList = new QListWidget;
             stepHistoryList->setObjectName("stepHistoryList");
+            stepHistoryList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             sideBarMainLayout->addWidget(stepHistoryList);
 
             // add back btn
@@ -135,6 +148,7 @@ namespace Ui {
             // add fight history list
             fightHistoryList = new QListWidget;
             fightHistoryList->setObjectName("fightHistoryList");
+            fightHistoryList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             sideBarMainLayout->addWidget(fightHistoryList);
 
         }

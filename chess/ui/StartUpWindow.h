@@ -120,7 +120,7 @@ namespace Ui {
 
         void btnClicked() const {
             loadingLabel->setText("Loading..");
-            timer->start(10);
+            timer->start(7);
         }
 
         void progress() {
