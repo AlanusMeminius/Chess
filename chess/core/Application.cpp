@@ -110,6 +110,8 @@ void Application::_move_pieces(int &previous, int &current) {
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
+
+    _step_history(current);
 }
 
 void Application::_init_btn_signal() {
@@ -131,10 +133,8 @@ void Application::restore_board() {
 }
 
 void Application::_step_history(int &current) {
-/*
- * 两个棋子位置，*/
 
-    ui->sideBar->fightHistoryList->addItem("");
+    ui->sideBar->stepHistoryList->addItem("车六进七");
 }
 
 

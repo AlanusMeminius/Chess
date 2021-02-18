@@ -6,6 +6,7 @@
 #include <QPainterPath>
 #include <QResizeEvent>
 #include <QWidget>
+#include <QPropertyAnimation>
 #include <QtWidgets/QGridLayout>
 #include "../core/Piece.h"
 
@@ -17,9 +18,9 @@ namespace Ui {
      * */
     class CampHint : public QWidget {
     Q_OBJECT
-    private:
-        QPropertyAnimation *animation;
     public:
+        QPropertyAnimation *animation;
+
         QWidget *hint;
 
     public:
