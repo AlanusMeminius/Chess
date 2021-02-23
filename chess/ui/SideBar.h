@@ -25,54 +25,50 @@ namespace Ui {
     };
 
     class TimeRecord : public QLabel {
-    	Q_OBJECT
+    Q_OBJECT
     public:
         QTime *qTime;
-    	QTimer* showTimer;
-		// 初始化 showTime->start(100)
-    	// 改变阵营改变 startTime
-    	// 对局结束 showTime->stop()
-    	// 一定时间提醒一下 直接在
-    
+        QTimer *showTimer;
+        // 初始化 showTime->start(100)
+        // 改变阵营改变 startTime
+        // 对局结束 showTime->stop()
+        // 一定时间提醒一下 直接在
+
     public:
-        TimeRecord(QObject* parent = nullptr):qTime(new QTime), showTimer(new QTimer),secs(0),total(0){
+        TimeRecord(QObject *parent = nullptr) : qTime(new QTime), showTimer(new QTimer), secs(0), total(0) {
             showTimer->setInterval(100);
-        	connect(showTimer, &QTimer::timeout, this, [this]()
-                {
-                    *qTime = QTime::currentTime();
-                    secs = -(qTime->secsTo(startTime));
-        			if(secs > 180)
-        			{
-                        emit timeRemind(secs);
-        			}
-                    elapse = QString::number(secs);
-                    setText(elapse);
-                });
+            connect(showTimer, &QTimer::timeout, this, [this]() {
+                *qTime = QTime::currentTime();
+                secs = -(qTime->secsTo(startTime));
+                if (secs > 180) {
+                    emit timeRemind(secs);
+                }
+                setText(QString("00:") + QString::number(secs).rightJustified(2, '0'));
+            });
         }
 
     public slots:
-        void reverse()
-        {
+
+        void reverse() {
             total += secs;
             startTime = QTime::currentTime();
         }
 
-    	void reset()
-        {
+        void reset() {
             total = 0;
             secs = 0;
             startTime = startTime.currentTime();
         }
 
     signals:
+
         void timeRemind(int secs);
-    
+
     private:
         int secs;
         int total;
         QTime startTime;
-        QString elapse;
-        
+
     };
 
     class SideBar : public QWidget {
@@ -125,7 +121,9 @@ namespace Ui {
             // add time widget
             timeRecord = new TimeRecord();
             timeRecord->setText("this is a time ");
+            timeRecord->setObjectName("TimeRecord");
             sideBarMainLayout->addWidget(timeRecord);
+            timeRecord->setAlignment(Qt::AlignCenter);
 
             // add btn
             firstBtnLayout = new QHBoxLayout;
@@ -144,15 +142,14 @@ namespace Ui {
                 firstBtnLayout->addWidget(item.second);
             };
             btnList["startStopBtn"]->setText(tr("开始"));
-            connect(btnList["startStopBtn"], &QPushButton::clicked, 
-                timeRecord, [=]()
-                {
-                    timeRecord->reset();
-                    timeRecord->showTimer->start();
-                }, Qt::DirectConnection);
+            connect(btnList["startStopBtn"], &QPushButton::clicked,
+                    timeRecord, [=]() {
+                        timeRecord->reset();
+                        timeRecord->showTimer->start();
+                    }, Qt::DirectConnection);
             btnList["restoreBtn"]->setText(tr("重置"));
-            connect(btnList["restoreBtn"], SIGNAL(clicked()), 
-				timeRecord->showTimer,SLOT(stop()), Qt::DirectConnection);
+            connect(btnList["restoreBtn"], SIGNAL(clicked()),
+                    timeRecord->showTimer, SLOT(stop()), Qt::DirectConnection);
 
             // add split line
             firstVerticalSplitLine = new QWidget;
