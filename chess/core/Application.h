@@ -2,6 +2,8 @@
 #define CHESS_APPLICATION_H
 
 #include <QFile>
+#include <iostream>
+#include <tuple>
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
 
@@ -18,6 +20,38 @@ private:
             {false, {"將", "士", "象", "馬", "車", "砲", "卒", "空白"}},
             {true,  {"帥", "仕", "相", "傌", "俥", "炮", "兵", "空白"}}
     };
+
+    std::map<bool,std::map<int, std::string>> _number_string{
+        {false,
+            {
+                {1,"一"},
+                {2,"二"},
+                {3,"三"},
+                {4,"四"},
+                {5,"五"},
+                {6,"六"},
+                {7,"七"},
+                {8,"八"},
+                {9,"九"}
+            }
+        },
+        {true,
+            {
+                {1,"1"},
+                {2,"2"},
+                {3,"3"},
+                {4,"4"},
+                {5,"5"},
+                {6,"6"},
+                {7,"7"},
+                {8,"8"},
+                {9,"9"}
+            }
+		}
+    };
+    typedef std::tuple<int, int, int, int> Trace;
+    std::vector<Trace> _trace_vector;
+    std::vector<std::string> _kifu_vector;
 
 private:
     int mode_;
@@ -85,7 +119,7 @@ private:
 
     void _move_pieces(int &, int &);
 
-    void _step_history(int &);
+    void _step_history(Trace &);
 };
 
 

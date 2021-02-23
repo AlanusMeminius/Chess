@@ -101,6 +101,9 @@ void Application::_move_pieces(int &previous, int &current) {
     current_camp_ = !current_camp_;
     ui->campHint->reverse(current_camp_);
     ui->sideBar->timeRecord->reverse();
+
+    Trace trace{ previous, _role(previous), current, _role(current) };
+	
     // 选中位置加载之前选中的棋子
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
 
@@ -112,7 +115,7 @@ void Application::_move_pieces(int &previous, int &current) {
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 
-    _step_history(current);
+    _step_history(trace);
 }
 
 void Application::_init_btn_signal() {
@@ -133,8 +136,14 @@ void Application::restore_board() {
     current_camp_ = true;
 }
 
-void Application::_step_history(int &current) {
+void Application::_step_history(Trace &trace) {
+    _trace_vector.push_back(trace);
 
+	qDebug() << "(" << std::get<0>(trace) << ","
+		<< std::get<1>(trace) << ","
+        << std::get<2>(trace) << ","
+        << std::get<3>(trace) << ")";
+    
     ui->sideBar->stepHistoryList->addItem("车六进七");
 }
 
