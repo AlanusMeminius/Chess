@@ -26,12 +26,41 @@ namespace Ui {
 
     class TimeRecord : public QLabel {
     public:
-        QTimer *qTimer;
         QTime *qTime;
+    	QTimer* showTimer;
+		// 初始化 showTime->start(100)
+    	// 改变阵营改变 startTime
+    	// 对局结束 showTime->stop()
+    	// 一定时间提醒一下 直接在
+    
     public:
-        TimeRecord() : qTime(new QTime), qTimer(new QTimer) {
-
+        TimeRecord(QObject* parent = nullptr):qTime(new QTime), showTimer(new QTimer){
+        	startTime = QTime::currentTime();
+        	connect(showTimer, &QTimer::timeout, this, [this]()
+                {
+                    *qTime = QTime::currentTime();
+                    secs = -(qTime->secsTo(startTime));
+                    elapse = QString::number(secs);
+                    setText(elapse);
+                });
         }
+
+    public slots:
+        void reset()
+        {
+            total += secs;
+            startTime = QTime::currentTime();
+        }
+
+    signals:
+        void timeRemind(int secs);
+    
+    private:
+        int secs;
+        int total;
+        QTime startTime;
+        QString elapse;
+        
     };
 
     class SideBar : public QWidget {
@@ -44,7 +73,7 @@ namespace Ui {
         QHBoxLayout *sideBarLayout;
         QWidget *horizontalSplitLine;
         QLabel *timeRecordLabel;
-        QLabel *timeRecord;
+        TimeRecord *timeRecord;
         QHBoxLayout *firstBtnLayout;
         std::map<QString, QPushButton *> btnList;
 
@@ -82,9 +111,9 @@ namespace Ui {
             timeRecordLabel->setFont(boldFont);
 
             // add time widget
-            timeRecord = new CustomLabel(
-                    sideBarMainLayout, "timeRecord", "this is time", 30
-            );
+            timeRecord = new TimeRecord();
+            timeRecord->setText("this is a time ");
+            sideBarMainLayout->addWidget(timeRecord);
 
             // add btn
             firstBtnLayout = new QHBoxLayout;
