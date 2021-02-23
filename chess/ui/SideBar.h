@@ -25,6 +25,7 @@ namespace Ui {
     };
 
     class TimeRecord : public QLabel {
+    	Q_OBJECT
     public:
         QTime *qTime;
     	QTimer* showTimer;
@@ -34,22 +35,33 @@ namespace Ui {
     	// 一定时间提醒一下 直接在
     
     public:
-        TimeRecord(QObject* parent = nullptr):qTime(new QTime), showTimer(new QTimer){
-        	startTime = QTime::currentTime();
+        TimeRecord(QObject* parent = nullptr):qTime(new QTime), showTimer(new QTimer),secs(0),total(0){
+            showTimer->setInterval(100);
         	connect(showTimer, &QTimer::timeout, this, [this]()
                 {
                     *qTime = QTime::currentTime();
                     secs = -(qTime->secsTo(startTime));
+        			if(secs > 180)
+        			{
+                        emit timeRemind(secs);
+        			}
                     elapse = QString::number(secs);
                     setText(elapse);
                 });
         }
 
     public slots:
-        void reset()
+        void reverse()
         {
             total += secs;
             startTime = QTime::currentTime();
+        }
+
+    	void reset()
+        {
+            total = 0;
+            secs = 0;
+            startTime = startTime.currentTime();
         }
 
     signals:
@@ -132,7 +144,15 @@ namespace Ui {
                 firstBtnLayout->addWidget(item.second);
             };
             btnList["startStopBtn"]->setText(tr("开始"));
+            connect(btnList["startStopBtn"], &QPushButton::clicked, 
+                timeRecord, [=]()
+                {
+                    timeRecord->reset();
+                    timeRecord->showTimer->start();
+                }, Qt::DirectConnection);
             btnList["restoreBtn"]->setText(tr("重置"));
+            connect(btnList["restoreBtn"], SIGNAL(clicked()), 
+				timeRecord->showTimer,SLOT(stop()), Qt::DirectConnection);
 
             // add split line
             firstVerticalSplitLine = new QWidget;
