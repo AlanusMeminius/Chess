@@ -9,6 +9,10 @@ background-color: #ffffff;
 background-color: #DAA520;
 }
 
+#TimeRecord {
+font: 15px;
+}
+
 #restoreBtn, #startStopBtn {
 background-color: #CD853F;
 border: none;
