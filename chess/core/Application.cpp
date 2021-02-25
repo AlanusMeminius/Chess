@@ -103,6 +103,7 @@ void Application::_move_pieces(int &previous, int &current) {
     ui->sideBar->timeRecord->reverse();
 
     Trace trace{ previous, _role(previous), current, _role(current) };
+	_step_history(trace);
 	
     // 选中位置加载之前选中的棋子
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
@@ -113,9 +114,7 @@ void Application::_move_pieces(int &previous, int &current) {
 
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
     pieces_[previous]->role_ = 7;
-    piece_widgets_[previous]->load(QString(":/blank.svg"));
-
-    _step_history(trace);
+    piece_widgets_[previous]->load(QString(":/blank.svg"));  
 }
 
 void Application::_init_btn_signal() {
@@ -136,13 +135,38 @@ void Application::restore_board() {
     current_camp_ = true;
 }
 
-void Application::_step_history(Trace &trace) {
-    _trace_vector.push_back(trace);
+void Application::_step_history(const Trace& trace) {
+    QString front_behind;
+    trace_vector_.push_back(trace);
+	
+    // 1.自己方阵营同类型棋子是否在同一列 -> 前后
+    // 2.移动前后位置是否在同一行 -> 平 进退
+    // 3.计算距离算进退
+    // 4.解析role piece_character_[camp][role]
+    // 5.组装该步走法
+	
+    int camp = trace_vector_.size() % 2;
+    int col = trace[0] % 9;
+	
+	for(int i = 0; i < 10; col += 9, ++i) {
+		if(col == trace[0])
+            continue;
+		if(pieces_[col]->role_ == trace[1] && pieces_[col]->camp_ == camp){
+            if ((col < trace[0] && camp == 0) ||
+                (col > trace[0] && camp == 1))
+                front_behind = "前";
+            else
+                front_behind = "后";
+		}
+	}
 
-	qDebug() << "(" << std::get<0>(trace) << ","
-		<< std::get<1>(trace) << ","
-        << std::get<2>(trace) << ","
-        << std::get<3>(trace) << ")";
+	if(true){
+		
+	}
     
-    ui->sideBar->stepHistoryList->addItem("车六进七");
+    QString role_str = piece_character_[camp][trace[1]];
+	
+    QString result = role_str;
+    kifu_vector_.push_back(std::move(result));
+    ui->sideBar->stepHistoryList->addItem(kifu_vector_.back());
 }

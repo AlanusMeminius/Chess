@@ -16,18 +16,18 @@ private:
             {false, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
             {true,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
     };
-    [[maybe_unused]] std::map<bool, std::vector<QString>> piece_character_{
-            {false, {"將", "士", "象", "馬", "車", "砲", "卒", "空白"}},
-            {true,  {"帥", "仕", "相", "傌", "俥", "炮", "兵", "空白"}}
+    [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
+            "將", "士", "象", "馬", "車", "砲", "卒", 
+            "帥", "仕", "相", "傌", "俥", "炮", "兵",
     };
 
-    std::array<std::array<std::string, 9>, 2> _number_string{
+    [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
     	"一", "二", "三", "四", "五", "六", "七", "八", "九",
-    	"1", "2", "3", "4", "5", "6", "7", "8", "9"
+    	"9", "8", "7", "6", "5", "5", "3", "2", "1"
     };
     typedef std::array<int, 4> Trace;
-    std::vector<Trace> _trace_vector;
-    std::vector<std::string> _kifu_vector;
+    std::vector<Trace> trace_vector_;
+    std::vector<QString> kifu_vector_;
 
 private:
     int mode_;
@@ -95,7 +95,7 @@ private:
 
     void _move_pieces(int &, int &);
 
-    void _step_history(Trace &);
+    void _step_history(const Trace &);
 };
 
 
