@@ -43,7 +43,7 @@ namespace Ui {
                 if (secs > 180) {
                     emit timeRemind(secs);
                 }
-                setText(QString("00:") + QString::number(secs).rightJustified(2, '0'));
+                _set_text(secs);
             });
         }
 
@@ -57,6 +57,7 @@ namespace Ui {
         void reset() {
             total = 0;
             secs = 0;
+            _set_text(secs);
             startTime = startTime.currentTime();
         }
 
@@ -68,6 +69,22 @@ namespace Ui {
         int secs;
         int total;
         QTime startTime;
+
+    private:
+    	QString _set_text(int secs){
+            QString result;
+    		// max 100 minutes
+            if (secs > 6000) {
+                secs = secs - 6000;
+            }
+
+            int t_sec = secs % 60;
+            int t_min = secs / 60;
+
+            result = tr("%1:%2").arg(t_min, 2, 10, QChar('0')).arg(t_sec, 2, 10, QChar('0'));
+            setText(result);
+            return result;
+    	}
 
     };
 
@@ -148,8 +165,11 @@ namespace Ui {
                         timeRecord->showTimer->start();
                     }, Qt::DirectConnection);
             btnList["restoreBtn"]->setText(tr("重置"));
-            connect(btnList["restoreBtn"], SIGNAL(clicked()),
-                    timeRecord->showTimer, SLOT(stop()), Qt::DirectConnection);
+            connect(btnList["restoreBtn"], &QPushButton::clicked,
+                timeRecord, [=](){
+                    timeRecord->reset();
+                    timeRecord->showTimer->stop();
+                }, Qt::DirectConnection);
 
             // add split line
             firstVerticalSplitLine = new QWidget;

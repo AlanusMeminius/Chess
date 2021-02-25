@@ -137,7 +137,7 @@ void Application::restore_board() {
 }
 
 void Application::_step_history(Trace &trace) {
-    _trace_vector.push_back(trace);
+    _trace_vector.push_back(std::move(trace));
 
 	qDebug() << "(" << std::get<0>(trace) << ","
 		<< std::get<1>(trace) << ","
