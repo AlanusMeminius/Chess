@@ -146,5 +146,3 @@ void Application::_step_history(Trace &trace) {
     
     ui->sideBar->stepHistoryList->addItem("车六进七");
 }
-
-

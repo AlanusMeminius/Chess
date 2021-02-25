@@ -51,7 +51,7 @@ namespace Ui {
 
         void reverse() {
             total += secs;
-            startTime = QTime::currentTime();
+            startTime = startTime.currentTime();
         }
 
         void reset() {
