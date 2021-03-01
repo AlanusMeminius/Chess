@@ -160,13 +160,13 @@ void Application::_step_history(const Trace& trace) {
 		}
 	}
 
-	if(true){
-		
-	}
+void Application::_step_history(Trace &trace) {
+    _trace_vector.push_back(trace);
+
+	qDebug() << "(" << std::get<0>(trace) << ","
+		<< std::get<1>(trace) << ","
+        << std::get<2>(trace) << ","
+        << std::get<3>(trace) << ")";
     
-    QString role_str = piece_character_[camp][trace[1]];
-	
-    QString result = role_str;
-    kifu_vector_.push_back(std::move(result));
-    ui->sideBar->stepHistoryList->addItem(kifu_vector_.back());
+    ui->sideBar->stepHistoryList->addItem("车六进七");
 }
