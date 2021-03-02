@@ -102,8 +102,9 @@ void Application::_move_pieces(int &previous, int &current) {
     ui->campHint->reverse(current_camp_);
     ui->sideBar->timeRecord->reverse();
 
-    Trace trace{ previous, _role(previous), current, _role(current) };
-	
+    Trace trace{previous, _role(previous), current, _role(current)};
+    _step_history(trace);
+
     // 选中位置加载之前选中的棋子
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][_role(previous)]);
 
@@ -114,8 +115,6 @@ void Application::_move_pieces(int &previous, int &current) {
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
     pieces_[previous]->role_ = 7;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
-
-    _step_history(trace);
 }
 
 void Application::_init_btn_signal() {
@@ -134,15 +133,41 @@ void Application::restore_board() {
     // flag 重新初始化
     is_first_step_ = true;
     current_camp_ = true;
+    ui->sideBar->stepHistoryList->clear();
 }
 
-void Application::_step_history(Trace &trace) {
-    _trace_vector.push_back(std::move(trace));
+void Application::_step_history(const Trace &trace) {
+    // 1.自己方阵营同类型棋子是否在同一列 -> 前后
+    // 2.移动前后位置是否在同一行 -> 平 进退
+    // 3.计算距离算进退
+    // 4.解析role piece_character_[camp][role]
+    // 5.组装该步走法
+    QString former_;
+    QString new_;
 
-	qDebug() << "(" << std::get<0>(trace) << ","
-		<< std::get<1>(trace) << ","
-        << std::get<2>(trace) << ","
-        << std::get<3>(trace) << ")";
-    
-    ui->sideBar->stepHistoryList->addItem("车六进七");
+    bool camp = _camp(trace[0]);
+    int colume = trace[0] % 9;
+    int column_distance_ = _column_distance(trace[0], trace[2]);
+
+    for (int k = colume; k < 90; k += 9) {
+        if (k == trace[0])
+            continue;
+        QString character = piece_character_[camp][trace[1]];
+        if (_camp(k) == camp && _role(k) == trace[1]) {
+            if (k < trace[0])
+                former_ = tr("前") + character;
+            else
+                former_ = tr("后") + character;
+        } else {
+            former_ = character + _number_string[camp][camp ? (8 - colume) : (colume)];
+        }
+    }
+
+    if (column_distance_ != 0)
+        new_ = (column_distance_ > 0 ? (camp ? tr("进") : tr("退")) : (camp ? tr("退") : tr("进")))
+               + _number_string[camp][abs(column_distance_) - 1];
+    else
+        new_ = tr("平") + _number_string[camp][camp ? (10 - colume) : (colume)];
+    ui->sideBar->stepHistoryList->addItem(former_ + new_);
+    trace_vector_.push_back(trace);
 }

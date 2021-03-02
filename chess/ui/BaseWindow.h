@@ -67,7 +67,7 @@ namespace Ui {
             // add sidebar
             mainLayout->addWidget(sideBar);
             sideBar->setMaximumWidth(200);
-            sideBar->setMinimumWidth(150);
+            sideBar->setMinimumWidth(190);
 
             setStatusBar(statusBar);
         }
