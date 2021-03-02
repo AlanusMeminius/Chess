@@ -47,7 +47,9 @@ private slots:
         (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
     }
 
-    void restore_board();
+    void restore();
+
+    void undo();
 
 public:
 
@@ -69,6 +71,16 @@ private:
     [[nodiscard]] inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
 
     [[nodiscard]] inline int _role(const int &pos) const { return pieces_[pos]->role_; }
+
+    inline void _reverse_flag() {
+        is_first_step_ = !is_first_step_;
+        current_camp_ = !current_camp_;
+    }
+
+    inline void _change_nfo(const bool &camp, const int &role, const int &pos) {
+        pieces_[pos]->camp_ = camp;
+        pieces_[pos]->role_ = role;
+    }
 
     /*初始化*/
     void _init_logic_pieces();
