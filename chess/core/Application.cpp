@@ -133,6 +133,7 @@ void Application::restore_board() {
     // flag 重新初始化
     is_first_step_ = true;
     current_camp_ = true;
+    ui->sideBar->stepHistoryList->clear();
 }
 
 void Application::_step_history(const Trace &trace) {
@@ -141,36 +142,32 @@ void Application::_step_history(const Trace &trace) {
     // 3.计算距离算进退
     // 4.解析role piece_character_[camp][role]
     // 5.组装该步走法
-    if (current_camp_)
-        ui->sideBar->stepHistoryList->addItem(
-                _tablature(true, trace_vector_.back()) + tr(" ") + _tablature(false, trace)
-        );
-    trace_vector_.push_back(trace);
-}
-
-
-QString Application::_tablature(bool camp, const Trace &trace) {
     QString former_;
-    for (int k = trace[0] % 9; k < 90; k += 9) {
+    QString new_;
+
+    bool camp = _camp(trace[0]);
+    int colume = trace[0] % 9;
+    int column_distance_ = _column_distance(trace[0], trace[2]);
+
+    for (int k = colume; k < 90; k += 9) {
         if (k == trace[0])
             continue;
         QString character = piece_character_[camp][trace[1]];
-        if (_camp(trace[0]) == camp && _role(k) == trace[1]) {
+        if (_camp(k) == camp && _role(k) == trace[1]) {
             if (k < trace[0])
                 former_ = tr("前") + character;
             else
                 former_ = tr("后") + character;
         } else {
-            former_ = character + _number_string[camp][camp ? (8 - trace[0] % 9) : (trace[0] % 9)];
+            former_ = character + _number_string[camp][camp ? (8 - colume) : (colume)];
         }
     }
 
-    QString new_;
-    int column_distance_ = _column_distance(trace[0], trace[2]);
     if (column_distance_ != 0)
         new_ = (column_distance_ > 0 ? (camp ? tr("进") : tr("退")) : (camp ? tr("退") : tr("进")))
                + _number_string[camp][abs(column_distance_) - 1];
     else
-        new_ = tr("平") + _number_string[camp][camp ? (10 - trace[0] % 9) : (trace[0] % 9)];
-    return former_ + new_;
+        new_ = tr("平") + _number_string[camp][camp ? (10 - colume) : (colume)];
+    ui->sideBar->stepHistoryList->addItem(former_ + new_);
+    trace_vector_.push_back(trace);
 }

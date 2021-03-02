@@ -66,9 +66,9 @@ private:
 
     inline bool _check_camp(int &pos) const { return (_camp(pos) == current_camp_); }
 
-    inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
+    [[nodiscard]] inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
 
-    inline int _role(const int &pos) const { return pieces_[pos]->role_; }
+    [[nodiscard]] inline int _role(const int &pos) const { return pieces_[pos]->role_; }
 
     /*初始化*/
     void _init_logic_pieces();
@@ -98,9 +98,6 @@ private:
     void _step_history(const Trace &);
 
     static inline int _column_distance(const int &a, const int &b) { return (a / 9 - b / 9); }
-
-    QString _tablature(bool, const Trace &trace);
-
 };
 
 
