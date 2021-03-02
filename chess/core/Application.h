@@ -17,13 +17,13 @@ private:
             {true,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
     };
     [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
-            "將", "士", "象", "馬", "車", "砲", "卒", 
+            "將", "士", "象", "馬", "車", "砲", "卒",
             "帥", "仕", "相", "傌", "俥", "炮", "兵",
     };
 
     [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
-    	"一", "二", "三", "四", "五", "六", "七", "八", "九",
-    	"9", "8", "7", "6", "5", "5", "3", "2", "1"
+            "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "一", "二", "三", "四", "五", "六", "七", "八", "九"
     };
     typedef std::array<int, 4> Trace;
     std::vector<Trace> trace_vector_;
@@ -66,11 +66,9 @@ private:
 
     inline bool _check_camp(int &pos) const { return (_camp(pos) == current_camp_); }
 
-    inline bool _camp(int &pos) const { return pieces_[pos]->camp_; }
+    inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
 
-    inline int _role(int &pos) const { return pieces_[pos]->role_; }
-
-private:
+    inline int _role(const int &pos) const { return pieces_[pos]->role_; }
 
     /*初始化*/
     void _init_logic_pieces();
@@ -95,7 +93,14 @@ private:
 
     void _move_pieces(int &, int &);
 
+    /* 行进历史记录
+     * */
     void _step_history(const Trace &);
+
+    static inline int _column_distance(const int &a, const int &b) { return (a / 9 - b / 9); }
+
+    QString _tablature(bool, const Trace &trace);
+
 };
 
 
