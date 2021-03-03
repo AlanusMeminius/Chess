@@ -57,6 +57,8 @@ private slots:
     void piece_click_event(int pos) {
         if (is_started)
             (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
+        else
+            ui->sendMsg("先点击开始按钮");
     }
 
     void restore();
