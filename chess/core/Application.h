@@ -4,6 +4,7 @@
 #include <QFile>
 #include <iostream>
 #include <tuple>
+#include <QListWidgetItem>
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
 
@@ -40,6 +41,15 @@ private:
     std::vector<char> board_;
     std::vector<std::shared_ptr<Piece>> pieces_;
     std::vector<Ui::PieceWidget *> piece_widgets_;
+    QListWidget *&step_list = ui->sideBar->stepHistoryList;
+
+public:
+
+    explicit Application(int index);
+
+    ~Application() override;
+
+    void show_window() const;
 
 private slots:
 
@@ -50,14 +60,6 @@ private slots:
     void restore();
 
     void undo();
-
-public:
-
-    explicit Application(int index);
-
-    ~Application() override;
-
-    void show_window() const;
 
 private:
 
@@ -87,7 +89,7 @@ private:
 
     void _init_ui_pieces();
 
-    void _init_btn_signal();
+    void _init_clicked_signal();
 
     /*
      * 下棋逻辑判断
@@ -108,8 +110,6 @@ private:
     /* 行进历史记录
      * */
     void _step_history(const Trace &);
-
-    static inline int _column_distance(const int &a, const int &b) { return (a / 9 - b / 9); }
 };
 
 

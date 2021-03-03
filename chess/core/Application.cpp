@@ -4,7 +4,7 @@
 Application::Application(int index) : ui(new Ui::BaseWindow), mode_(index) {
     _init_logic_pieces();
     _init_ui_pieces();
-    _init_btn_signal();
+    _init_clicked_signal();
     qDebug() << mode_;
 }
 
@@ -43,6 +43,18 @@ void Application::_init_ui_pieces() {
             p->load(piece_pic_[piece->camp_][piece->role_]);
         connect(p, &Ui::PieceWidget::getPos, this, &Application::piece_click_event);
     }
+}
+
+void Application::_init_clicked_signal() {
+    connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore);
+    connect(ui->sideBar->undoBtn, &QPushButton::clicked, this, &Application::undo);
+    connect(step_list, &QListWidget::itemDoubleClicked, this, [this] {
+        int cout = step_list->count() - step_list->currentRow();
+        while (cout > 0) {
+            undo();
+            cout--;
+        }
+    });
 }
 
 void Application::_check_first_step(int &pos) {
@@ -115,11 +127,6 @@ void Application::_move_pieces(int &previous, int &current) {
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
 
-void Application::_init_btn_signal() {
-    connect(ui->sideBar->btnList["restoreBtn"], &QPushButton::clicked, this, &Application::restore);
-    connect(ui->sideBar->undoBtn, &QPushButton::clicked, this, &Application::undo);
-}
-
 void Application::restore() {
     for (int i = 0; i < pieces_.size(); i++) {
         // 逻辑棋子使用构造函数更新
@@ -129,22 +136,7 @@ void Application::restore() {
     // flag 重新初始化
     is_first_step_ = true;
     current_camp_ = true;
-    ui->sideBar->stepHistoryList->clear();
-}
-
-void Application::undo() {
-    Trace last = trace_vector_.back();
-    _change_nfo(_camp(last[2]), last[1], last[0]);
-    piece_widgets_[last[0]]->load(piece_pic_[_camp(last[2])][last[1]]);
-    piece_widgets_[last[2]]->load(
-            (last[3] < 7) ? piece_pic_[_camp(last[2])][last[2]] : ":/blank.svg"
-    );
-    _change_nfo(!_camp(last[2]), last[3], last[2]);
-    _reverse_flag();
-    previous_select_ = last[0];
-    ui->campHint->reverse(current_camp_);
-    ui->sideBar->stepHistoryList->takeItem(ui->sideBar->stepHistoryList->count() - 1);
-    trace_vector_.pop_back();
+    step_list->clear();
 }
 
 void Application::_step_history(const Trace &trace) {
@@ -158,7 +150,7 @@ void Application::_step_history(const Trace &trace) {
 
     bool camp = _camp(trace[0]);
     int colume = trace[0] % 9;
-    int column_distance_ = _column_distance(trace[0], trace[2]);
+    int column_distance_ = trace[0] / 9 - trace[2] / 9;
 
     for (int k = colume; k < 90; k += 9) {
         if (k == trace[0])
@@ -179,6 +171,21 @@ void Application::_step_history(const Trace &trace) {
                + _number_string[camp][abs(column_distance_) - 1];
     else
         new_ = tr("平") + _number_string[camp][camp ? (10 - colume) : (colume)];
-    ui->sideBar->stepHistoryList->addItem(former_ + new_);
+    step_list->addItem(former_ + new_);
     trace_vector_.push_back(trace);
+}
+
+void Application::undo() {
+    Trace last = trace_vector_.back();
+    _change_nfo(_camp(last[2]), last[1], last[0]);
+    piece_widgets_[last[0]]->load(piece_pic_[_camp(last[2])][last[1]]);
+    piece_widgets_[last[2]]->load(
+            (last[3] < 7) ? piece_pic_[_camp(last[2])][last[2]] : ":/blank.svg"
+    );
+    _change_nfo(!_camp(last[2]), last[3], last[2]);
+    _reverse_flag();
+    previous_select_ = last[0];
+    ui->campHint->reverse(current_camp_);
+    step_list->takeItem(step_list->count() - 1);
+    trace_vector_.pop_back();
 }
