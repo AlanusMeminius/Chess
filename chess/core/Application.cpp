@@ -156,10 +156,10 @@ void Application::_step_history(const Trace &trace) {
     QString new_;
 
     bool camp = _camp(trace[0]);
-    int colume = trace[0] % 9;
+    int column = trace[0] % 9;
     int column_distance_ = trace[0] / 9 - trace[2] / 9;
 
-    for (int k = colume; k < 90; k += 9) {
+    for (int k = column; k < 90; k += 9) {
         if (k == trace[0])
             continue;
         QString character = piece_character_[camp][trace[1]];
@@ -169,7 +169,7 @@ void Application::_step_history(const Trace &trace) {
             else
                 former_ = tr("后") + character;
         } else {
-            former_ = character + _number_string[camp][camp ? (8 - colume) : (colume)];
+            former_ = character + _number_string[camp][camp ? (8 - column) : (column)];
         }
     }
 
@@ -177,7 +177,7 @@ void Application::_step_history(const Trace &trace) {
         new_ = (column_distance_ > 0 ? (camp ? tr("进") : tr("退")) : (camp ? tr("退") : tr("进")))
                + _number_string[camp][abs(column_distance_) - 1];
     else
-        new_ = tr("平") + _number_string[camp][camp ? (10 - colume) : (colume)];
+        new_ = tr("平") + _number_string[camp][camp ? (10 - column) : (column)];
     step_list->addItem(former_ + new_);
     trace_vector_.push_back(trace);
 }
