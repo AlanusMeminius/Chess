@@ -35,6 +35,7 @@ private:
     bool is_first_step_ = true;
     int previous_select_ = -1;
     bool current_camp_ = true;
+    bool is_started = false;
 
 private:
     Ui::BaseWindow *ui;
@@ -54,7 +55,8 @@ public:
 private slots:
 
     void piece_click_event(int pos) {
-        (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
+        if (is_started)
+            (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
     }
 
     void restore();

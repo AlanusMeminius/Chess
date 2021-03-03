@@ -55,6 +55,13 @@ void Application::_init_clicked_signal() {
             cout--;
         }
     });
+
+    connect(ui->sideBar->btnList["startStopBtn"], &QPushButton::clicked,
+            ui->sideBar->timeRecord, [=]() {
+                ui->sideBar->timeRecord->reset();
+                ui->sideBar->timeRecord->showTimer->start();
+                is_started = true;
+            }, Qt::DirectConnection);
 }
 
 void Application::_check_first_step(int &pos) {
