@@ -4,6 +4,7 @@
 #include <QFile>
 #include <iostream>
 #include <tuple>
+#include <QListWidgetItem>
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
 
@@ -40,14 +41,7 @@ private:
     std::vector<char> board_;
     std::vector<std::shared_ptr<Piece>> pieces_;
     std::vector<Ui::PieceWidget *> piece_widgets_;
-
-private slots:
-
-    void piece_click_event(int pos) {
-        (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
-    }
-
-    void restore_board();
+    QListWidget *&step_list = ui->sideBar->stepHistoryList;
 
 public:
 
@@ -56,6 +50,16 @@ public:
     ~Application() override;
 
     void show_window() const;
+
+private slots:
+
+    void piece_click_event(int pos) {
+        (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
+    }
+
+    void restore();
+
+    void undo();
 
 private:
 
@@ -70,12 +74,22 @@ private:
 
     [[nodiscard]] inline int _role(const int &pos) const { return pieces_[pos]->role_; }
 
+    inline void _reverse_flag() {
+        is_first_step_ = !is_first_step_;
+        current_camp_ = !current_camp_;
+    }
+
+    inline void _change_nfo(const bool &camp, const int &role, const int &pos) {
+        pieces_[pos]->camp_ = camp;
+        pieces_[pos]->role_ = role;
+    }
+
     /*初始化*/
     void _init_logic_pieces();
 
     void _init_ui_pieces();
 
-    void _init_btn_signal();
+    void _init_clicked_signal();
 
     /*
      * 下棋逻辑判断
@@ -96,8 +110,6 @@ private:
     /* 行进历史记录
      * */
     void _step_history(const Trace &);
-
-    static inline int _column_distance(const int &a, const int &b) { return (a / 9 - b / 9); }
 };
 
 

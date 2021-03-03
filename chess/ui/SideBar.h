@@ -106,7 +106,7 @@ namespace Ui {
         QWidget *firstVerticalSplitLine;
         CustomLabel *stepHistoryLabel;
         QListWidget *stepHistoryList;
-        QPushButton *backBtn;
+        QPushButton *undoBtn;
 
         CustomLabel *fightHistoryLabel;
         QWidget *secondVerticalSplitLine;
@@ -195,10 +195,10 @@ namespace Ui {
             secondBtnLayout->setContentsMargins(10, 10, 10, 10);
             sideBarMainLayout->addLayout(secondBtnLayout);
 
-            backBtn = new QPushButton("悔棋");
-            backBtn->setObjectName("backBtn");
-            backBtn->setMinimumHeight(25);
-            secondBtnLayout->addWidget(backBtn);
+            undoBtn = new QPushButton("悔棋");
+            undoBtn->setObjectName("backBtn");
+            undoBtn->setMinimumHeight(25);
+            secondBtnLayout->addWidget(undoBtn);
 
             // add split line
             secondVerticalSplitLine = new QWidget;
