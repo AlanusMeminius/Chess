@@ -9,10 +9,10 @@
 #include "../ui/BaseWindow.h"
 
 class Application : public QObject {
-Q_OBJECT
-private:
+    Q_OBJECT
+    private:
     const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
-                                          "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
+        "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
     std::map<bool, std::vector<QString>> piece_pic_{
             {false, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
             {true,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
@@ -30,91 +30,90 @@ private:
     std::vector<Trace> trace_vector_;
     std::vector<QString> kifu_vector_;
 
-private:
+    private:
     int mode_;
     bool is_first_step_ = true;
     int previous_select_ = -1;
     bool current_camp_ = true;
     bool is_started = false;
 
-private:
-    Ui::BaseWindow *ui;
+    private:
+    Ui::BaseWindow* ui;
     std::vector<char> board_;
     std::vector<std::shared_ptr<Piece>> pieces_;
-    std::vector<Ui::PieceWidget *> piece_widgets_;
-    QListWidget *&step_list = ui->sideBar->stepHistoryList;
+    std::vector<Ui::PieceWidget*> piece_widgets_;
+    QListWidget*& step_list = ui->sideBar->stepHistoryList;
 
-public:
+    public:
 
-    explicit Application(int index);
+    explicit Application (int index);
 
-    ~Application() override;
+    ~Application () override;
 
-    void show_window() const;
+    void show_window () const;
 
-private slots:
+    private slots:
 
-    void piece_click_event(int pos) {
+    void piece_click_event (int pos) {
         if (is_started)
-            (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
+            (is_first_step_) ? _check_first_step (pos) : _check_second_step (pos);
         else
-            ui->sendMsg("先点击开始按钮");
+            ui->sendMsg ("先点击开始按钮");
     }
 
-    void restore();
+    void restore ();
 
-    void undo();
+    void undo ();
 
-private:
+    private:
 
     /*
      * 帮助函数，重用
      * */
-    inline bool _check_role(int &pos) const { return (_role(pos) < 7); }
+    inline bool _check_role (int& pos) const { return (_role (pos) < 7); }
 
-    inline bool _check_camp(int &pos) const { return (_camp(pos) == current_camp_); }
+    inline bool _check_camp (int& pos) const { return (_camp (pos) == current_camp_); }
 
-    [[nodiscard]] inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
+    [[nodiscard]] inline bool _camp (const int& pos) const { return pieces_[pos]->camp_; }
 
-    [[nodiscard]] inline int _role(const int &pos) const { return pieces_[pos]->role_; }
+    [[nodiscard]] inline int _role (const int& pos) const { return pieces_[pos]->role_; }
 
-    inline void _reverse_flag() {
+    inline void _reverse_flag () {
         is_first_step_ = !is_first_step_;
         current_camp_ = !current_camp_;
     }
 
-    inline void _change_nfo(const bool &camp, const int &role, const int &pos) {
+    inline void _change_nfo (const bool& camp, const int& role, const int& pos) {
         pieces_[pos]->camp_ = camp;
         pieces_[pos]->role_ = role;
     }
 
     /*初始化*/
-    void _init_logic_pieces();
+    void _init_logic_pieces ();
 
-    void _init_ui_pieces();
+    void _init_ui_pieces ();
 
-    void _init_clicked_signal();
+    void _init_clicked_signal ();
 
     /*
      * 下棋逻辑判断
      * */
-    void _check_first_step(int &);
+    void _check_first_step (int&);
 
-    void _check_second_step(int &);
+    void _check_second_step (int&);
 
-    bool _check_strategy(int &);
+    bool _check_strategy (int&);
 
     /*
      * ui界面改变
      * */
-    void _highlight(int &);
+    void _highlight (int&);
 
-    void _move_pieces(int &, int &);
+    void _move_pieces (int&, int&);
 
     /* 行进历史记录
      * */
-    void _step_history(const Trace &);
+    void _step_history (const Trace&);
 };
-
 
 #endif //CHESS_APPLICATION_H

@@ -19,5 +19,4 @@ public:
     Piece(char role, bool camp, int pos);
 };
 
-
 #endif //CHESS_PIECE_H

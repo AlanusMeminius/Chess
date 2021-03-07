@@ -1,5 +1,4 @@
-#ifndef CHESS_CHESSBOARD_H
-#define CHESS_CHESSBOARD_H
+#pragma once
 
 #include <QPainter>
 #include <QSvgWidget>
@@ -8,6 +7,7 @@
 #include <QWidget>
 #include <QPropertyAnimation>
 #include <QtWidgets/QGridLayout>
+
 #include "../core/Piece.h"
 
 QT_BEGIN_NAMESPACE
@@ -16,12 +16,12 @@ namespace Ui {
     /*
      * 行进方阵营标记
      * */
-    class CampHint : public QWidget {
+    class CampHint final : public QWidget {
     Q_OBJECT
     public:
-        QPropertyAnimation *animation;
+        QPropertyAnimation* animation;
 
-        QWidget *hint;
+        QWidget* hint;
 
     public:
         CampHint() {
@@ -35,12 +35,15 @@ namespace Ui {
             animation->setTargetObject(hint);
         }
 
-        void reverse(bool flag) {
-            if (flag) {
+        void reverse(const bool flag) const {
+            if (flag)
+            {
                 animation->setStartValue(QRect(0, height() / 2 - 200, 3, 200));
                 animation->setEndValue(QRect(0, height() / 2, 3, 200));
                 animation->start();
-            } else {
+            }
+            else
+            {
                 animation->setStartValue(QRect(0, height() / 2, 3, 200));
                 animation->setEndValue(QRect(0, height() / 2 - 200, 3, 200));
                 animation->start();
@@ -51,26 +54,29 @@ namespace Ui {
     /*
      * 棋子控件，加载棋子图片
      * */
-    class PieceWidget : public QSvgWidget {
+    class PieceWidget final : public QSvgWidget {
     Q_OBJECT
     public:
         std::shared_ptr<Piece> logicPiece;
 
     public:
-        explicit PieceWidget(std::shared_ptr<Piece> &piece) : logicPiece(piece) {}
+        explicit PieceWidget(std::shared_ptr<Piece>& piece) : logicPiece(piece) {
+        }
 
     signals:
 
         void getPos(int);
 
     protected:
-        [[maybe_unused]] void mousePressEvent(QMouseEvent *) override { emit getPos(logicPiece->pos_); }
+        [[maybe_unused]] void mousePressEvent(QMouseEvent*) override {
+            emit getPos(logicPiece->pos_);
+        }
     };
 
     /*
      * 棋盘控件，加载棋盘图片
      * */
-    class ChessBoardQWidget : public QSvgWidget {
+    class ChessBoardQWidget final : public QSvgWidget {
     Q_OBJECT
     public:
         ChessBoardQWidget() { load(QString(":/board.svg")); }
@@ -79,16 +85,16 @@ namespace Ui {
     /*
      * 棋盘主控件，重写resizeEvent，使子控件->棋盘控件保持比例
      * */
-    class ChessBoard : public QWidget {
+    class ChessBoard final : public QWidget {
     Q_OBJECT
     private:
         int widthRatio;
         int heightRatio;
 
     public:
-        QBoxLayout *layout;
-        ChessBoardQWidget *board;
-        QGridLayout *boardLayout;
+        QBoxLayout* layout;
+        ChessBoardQWidget* board;
+        QGridLayout* boardLayout;
 
     public:
         ChessBoard() : widthRatio(9), heightRatio(10) {
@@ -103,28 +109,31 @@ namespace Ui {
             boardLayout->setContentsMargins(0, 0, 0, 0);
             boardLayout->setSpacing(2);
             board->setLayout(boardLayout);
-            for (int i = 0; i < 9; ++i) {
+            for (int i = 0; i < 9; ++i)
+            {
                 boardLayout->setColumnStretch(i, 1);
                 boardLayout->setRowStretch(i, 1);
             }
             boardLayout->setRowStretch(9, 1);
         }
 
-        void resizeEvent(QResizeEvent *event) override {
+        void resizeEvent(QResizeEvent* event) override {
             const QSize oldSize = event->size();
             QSize newSize = event->size();
 
-            if (newSize.width() < widthRatio * newSize.height() / heightRatio) {
+            if (newSize.width() < widthRatio * newSize.height() / heightRatio)
+            {
                 newSize.setHeight(heightRatio * newSize.width() / widthRatio);
                 board->move(0, (oldSize.height() - newSize.height()) / 2);
-            } else {
+            }
+            else
+            {
                 newSize.setWidth(widthRatio * newSize.height() / heightRatio);
                 board->move((oldSize.width() - newSize.width()) / 2, 0);
             }
             board->resize(newSize);
         }
     };
-
 }
+
 QT_END_NAMESPACE
-#endif // CHESS_CHESSBOARD_H
