@@ -261,12 +261,13 @@ namespace SideBarComponent {
             settingPanelLayout = new QVBoxLayout;
             setLayout(settingPanelLayout);
             settingBtn = new QPushButton(tr("setting"));
+            settingBtn->setCheckable(true);
             settingPanelLayout->addWidget(settingBtn);
 
             settingWidget = new SettingWidget;
             settingPanelLayout->addWidget(settingWidget);
             settingWidget->hide();
-            connect(settingBtn, &QPushButton::toggled, this, &SubSettingPanel::isToggled);
+            connect(settingBtn, &QPushButton::toggled, this, &SubSettingPanel::isToggled, Qt::DirectConnection);
         }
 
         void resizeEvent(QResizeEvent* event) override {
@@ -350,7 +351,7 @@ namespace Ui {
 
         connect(
             subSettingPanel, &SideBarComponent::SubSettingPanel::setOtherHide,
-            fightHistoryPanel, &QWidget::setHidden
+            fightHistoryPanel, &QWidget::setHidden, Qt::DirectConnection
         );
     }
 }
