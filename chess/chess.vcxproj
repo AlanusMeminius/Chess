@@ -18,9 +18,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Strategy.h" />
-    <QtMoc Include="ui\Component.h" />
-    <QtMoc Include="ui\StartUpWindow.h" />
     <QtMoc Include="ui\SideBar.h" />
+    <QtMoc Include="ui\StartUpWindow.h" />
     <QtMoc Include="ui\ChessBoard.h" />
     <QtMoc Include="ui\BaseWindow.h" />
     <QtMoc Include="core\Application.h" />
