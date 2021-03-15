@@ -10,7 +10,7 @@
 
 class Application : public QObject {
     Q_OBJECT
-    private:
+private:
     const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
         "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
     std::map<bool, std::vector<QString>> piece_pic_{
@@ -30,14 +30,14 @@ class Application : public QObject {
     std::vector<Trace> trace_vector_;
     std::vector<QString> kifu_vector_;
 
-    private:
+private:
     int mode_;
     bool is_first_step_ = true;
     int previous_select_ = -1;
     bool current_camp_ = true;
     bool is_started = false;
 
-    private:
+private:
     Ui::BaseWindow* ui;
     std::vector<char> board_;
     std::vector<std::shared_ptr<Piece>> pieces_;
@@ -52,7 +52,7 @@ class Application : public QObject {
 
     void show_window () const;
 
-    private slots:
+private slots:
 
     void piece_click_event (int pos) {
         if (is_started)
@@ -65,7 +65,7 @@ class Application : public QObject {
 
     void undo ();
 
-    private:
+private:
 
     /*
      * 帮助函数，重用
@@ -114,6 +114,10 @@ class Application : public QObject {
     /* 行进历史记录
      * */
     void _step_history (const Trace&);
+
+    /* 将军检查
+     * */
+    void _checkmate(bool);
 };
 
 #endif //CHESS_APPLICATION_H

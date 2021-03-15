@@ -180,6 +180,27 @@ void Application::_step_history (const Trace& trace) {
     trace_vector_.push_back (trace);
 }
 
+void Application::_checkmate(bool camp)
+{
+    int general_pos;
+    for (auto& piece : pieces_) {
+        if ((piece->role_ == 0) || (piece->camp_ == !camp)){
+            general_pos = piece->pos_;
+            break;
+        }     
+    }
+
+    for (auto& piece : pieces_) {
+        if(piece->camp_ == camp) {
+            std::shared_ptr<Strategy> strategy(StrategyCreator::createStrategy(_role(previous_select_)));
+            if(strategy->is_movable(piece->pos_, general_pos, pieces_))
+            {
+                
+            }
+        }
+    }
+}
+
 void Application::undo () {
     Trace last = trace_vector_.back ();
     _change_nfo (_camp (last[2]), last[1], last[0]);
