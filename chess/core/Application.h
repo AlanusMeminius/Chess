@@ -36,6 +36,7 @@ private:
     int previous_select_ = -1;
     bool current_camp_ = true;
     bool is_started = false;
+    bool is_checkmate = false;
 
 private:
     Ui::BaseWindow* ui;
@@ -117,7 +118,7 @@ private:
 
     /* 将军检查
      * */
-    void _checkmate(bool);
+    bool _checkmate(bool);
 };
 
 #endif //CHESS_APPLICATION_H

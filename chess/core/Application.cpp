@@ -87,6 +87,14 @@ void Application::_check_second_step (int& pos) {
     } else {
         if (_check_strategy (pos)) {
             _move_pieces (previous_select_, pos);
+
+            if(is_checkmate && _checkmate(current_camp_)){
+                /*胜利的逻辑*/
+            }
+
+            if (is_checkmate = _checkmate(!current_camp_)) {
+                /*将军的逻辑*/
+            }
         } else {
             ui->sendMsg (tr ("不能移动"));
         }
@@ -180,8 +188,13 @@ void Application::_step_history (const Trace& trace) {
     trace_vector_.push_back (trace);
 }
 
-void Application::_checkmate(bool camp)
+bool Application::_checkmate(bool camp)
 {
+    // 每次移动后检查将军
+    // 胜利标志
+    // 将军之后还处于将军状态为将军方胜利
+
+    // find general pos
     int general_pos;
     for (auto& piece : pieces_) {
         if ((piece->role_ == 0) || (piece->camp_ == !camp)){
@@ -190,15 +203,18 @@ void Application::_checkmate(bool camp)
         }     
     }
 
+    // test checkmate
     for (auto& piece : pieces_) {
         if(piece->camp_ == camp) {
             std::shared_ptr<Strategy> strategy(StrategyCreator::createStrategy(_role(previous_select_)));
-            if(strategy->is_movable(piece->pos_, general_pos, pieces_))
-            {
-                
+            if(strategy->is_movable(piece->pos_, general_pos, pieces_)) {
+                return true;
             }
         }
     }
+
+    // filed
+    return false;
 }
 
 void Application::undo () {
