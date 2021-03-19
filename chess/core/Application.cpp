@@ -205,8 +205,8 @@ bool Application::_checkmate(bool camp)
 
     // test checkmate
     for (auto& piece : pieces_) {
-        if(piece->camp_ == camp) {
-            std::shared_ptr<Strategy> strategy(StrategyCreator::createStrategy(_role(previous_select_)));
+        if(piece->camp_ == camp && piece->role_ < 6) {
+            std::shared_ptr<Strategy> strategy(StrategyCreator::createStrategy(_role(piece->role_)));
             if(strategy->is_movable(piece->pos_, general_pos, pieces_)) {
                 return true;
             }
