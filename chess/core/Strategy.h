@@ -6,24 +6,24 @@
 #include "Piece.h"
 
 class Strategy {
-    public:
-    virtual ~Strategy () = default;
+public:
+    virtual ~Strategy() = default;
 
-    virtual bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) = 0;
+    virtual bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) = 0;
 };
 
 class GeneralsStrategy : public Strategy {
-    private:
+private:
     std::map<bool, std::vector<int>> possible_{
             {false, {3,  4,  5,  12, 13, 14, 21, 22, 23}},
             {true,  {66, 67, 68, 75, 76, 78, 84, 85, 86}}
     };
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class AdvisorsStrategy : public Strategy {
-    private:
+private:
     std::map<bool, std::map<int, std::vector<int>>> possible_{
             {false, {
                             {3,  {13}},
@@ -42,8 +42,8 @@ class AdvisorsStrategy : public Strategy {
                     },
             }
     };
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>& ) override;
 };
 
 class BishopsStrategy : public Strategy {
@@ -51,48 +51,48 @@ class BishopsStrategy : public Strategy {
             {false, {2,  6,  18, 22, 26, 38, 42}},
             {true,  {47, 51, 63, 67, 71, 83, 87}}
     };
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class HorsesStrategy : public Strategy {
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class ChariotsStrategy : public Strategy {
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class CannonsStrategy : public Strategy {
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class SoldiersStrategy : public Strategy {
-    public:
-    bool is_movable (int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+public:
+    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class StrategyCreator {
-    public:
-    static Strategy* createStrategy (int type) {
+public:
+    static Strategy* createStrategy(int type) {
         switch (type) {
             case 0:
-                return new GeneralsStrategy ();
+                return new GeneralsStrategy();
             case 1:
-                return new AdvisorsStrategy ();
+                return new AdvisorsStrategy();
             case 2:
-                return new BishopsStrategy ();
+                return new BishopsStrategy();
             case 3:
-                return new HorsesStrategy ();
+                return new HorsesStrategy();
             case 4:
-                return new ChariotsStrategy ();
+                return new ChariotsStrategy();
             case 5:
-                return new CannonsStrategy ();
+                return new CannonsStrategy();
             case 6:
-                return new SoldiersStrategy ();
+                return new SoldiersStrategy();
             default:
                 return nullptr;
         }

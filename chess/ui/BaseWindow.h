@@ -12,84 +12,58 @@
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
-    class BaseWindow final : public QMainWindow {
-    Q_OBJECT
-    private:
-        QWidget* centralwidget;
-        QHBoxLayout* mainLayout;
-    public:
-        Ui::ChessBoard* chessBoard;
-        Ui::SideBar* sideBar;
-        Ui::CampHint* campHint;
-        QStatusBar* statusBar;
-        QSystemTrayIcon* trayIcon;
-    public:
-        BaseWindow() :
-            centralwidget(new QWidget(this)),
-            mainLayout(new QHBoxLayout),
-            chessBoard(new Ui::ChessBoard),
-            sideBar(new Ui::SideBar),
-            campHint(new Ui::CampHint),
-            statusBar(new QStatusBar),
-            trayIcon(new QSystemTrayIcon) {
-            // set icon, windowSize, objectName
-            this->setWindowIcon(QPixmap(":/icon.png"));
-            this->resize(980, 900);
-            this->setObjectName(QString::fromUtf8("MainWindow"));
 
-            // set central widget
-            this->setCentralWidget(centralwidget);
-            centralwidget->setObjectName(QString::fromUtf8("centralWidget"));
+class BaseWindow final : public QMainWindow {
+Q_OBJECT
+private:
+    QWidget* centralwidget;
+    QHBoxLayout* mainLayout;
+public:
+    Ui::ChessBoard* chessBoard;
+    Ui::SideBar* sideBar;
+    Ui::CampHint* campHint;
+    QStatusBar* statusBar;
+    QSystemTrayIcon* trayIcon;
+public:
+    BaseWindow();
 
-            // set main layout
-            mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
-            centralwidget->setLayout(mainLayout);
+    void showMainWindow() {
+        show();
+    }
 
-            setMainStyle();
-            setCampHint();
-            setChessBoard();
-            setSideBar();
-            setSystemTrayIcon();
+    void sendMsg(const QString& msg) const {
+        const QString message = tr(" Status Info | ") + msg;
+        statusBar->showMessage(message);
+    }
 
-            setStatusBar(statusBar);
-        }
+    void setMainStyle() {
+        QFile styleFile(":/style.qss");
+        styleFile.open(QFile::ReadOnly);
+        const QString style(styleFile.readAll());
+        setStyleSheet(style);
+    }
 
-        void showMainWindow() {
-            show();
-        }
+    void setCampHint() {
+        mainLayout->addWidget(campHint);
+        campHint->setMinimumWidth(5);
+        campHint->setMaximumWidth(20);
+    }
 
-        void sendMsg(const QString& msg) const {
-            const QString message = tr(" Status Info | ") + msg;
-            statusBar->showMessage(message);
-        }
+    void setChessBoard()  {
+        chessBoard->setMinimumWidth(500);
+        mainLayout->addWidget(chessBoard);
+    }
 
-        void setMainStyle() {
-            QFile styleFile(":/style.qss");
-            styleFile.open(QFile::ReadOnly);
-            const QString style(styleFile.readAll());
-            this->setStyleSheet(style);
-        }
+    void setSideBar()  {
+        mainLayout->addWidget(sideBar);
+        sideBar->setMaximumWidth(200);
+        sideBar->setMinimumWidth(170);
+    }
 
-        void setCampHint() const {
-            mainLayout->addWidget(campHint);
-            campHint->setMinimumWidth(5);
-            campHint->setMaximumWidth(20);
-        }
+    void setSystemTrayIcon() {
+    }
+};
 
-        void setChessBoard() const {
-            chessBoard->setMinimumWidth(500);
-            mainLayout->addWidget(chessBoard);
-        }
-
-        void setSideBar() const {
-            mainLayout->addWidget(sideBar);
-            sideBar->setMaximumWidth(200);
-            sideBar->setMinimumWidth(170);
-        }
-
-        void setSystemTrayIcon() {
-        }
-    };
-}
+} // namespace Ui
 
 QT_END_NAMESPACE

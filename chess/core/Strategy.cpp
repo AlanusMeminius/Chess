@@ -1,4 +1,5 @@
 #include "Strategy.h"
+#include <algorithm>
 
 inline int v_coordinate(int& a) { return a / 9; }
 

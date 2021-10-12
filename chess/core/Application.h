@@ -37,11 +37,11 @@ private:
     bool current_camp_ = true;
 
 private:
-    Ui::BaseWindow *ui;
+    Ui::BaseWindow* ui;
     std::vector<char> board_;
     std::vector<std::shared_ptr<Piece>> pieces_;
-    std::vector<Ui::PieceWidget *> piece_widgets_;
-    QListWidget *&step_list = ui->sideBar->subStepHistoryPanel->list;
+    std::vector<Ui::PieceWidget*> piece_widgets_;
+    QListWidget*& step_list = ui->sideBar->subStepHistoryPanel->list; // 初始化顺序未定义
 
 public:
 

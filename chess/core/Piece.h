@@ -9,6 +9,21 @@
 #include <string>
 #include <memory>
 
+enum class PieceRole {
+    Generals,     // 将
+    Advisors,     // 士
+    Bishops,      // 象
+    Horses,       // 马
+    Chariots,     // 车
+    Cannons,      // 炮
+    Soldiers,     // 兵
+};
+
+enum class Camp {
+    Red,
+    Blue,
+};
+
 class Piece {
 public:
     bool camp_;

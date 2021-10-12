@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.17)
 project(Chess)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_PREFIX_PATH "D:/Qt/6.1.0/msvc2019_64")
+set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.14.2/5.14.2/mingw73_64")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(QT_VERSION 6)
-set(REQUIRED_LIBS Core Gui Widgets SvgWidgets)
-set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Gui Qt6::Widgets Qt6::SvgWidgets)
+set(QT_VERSION 5)
+set(REQUIRED_LIBS Core Gui Widgets Svg)
+set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Svg)
 
 set(QRC resources/resources.qrc)
 set(UI ui/StartUpWindow.h ui/SideBar.h ui/BaseWindow.h ui/ChessBoard.h)

@@ -3,6 +3,7 @@
 //
 
 #include "Piece.h"
+#include <algorithm>
 
 Piece::Piece (char role, bool camp, int pos) : camp_ (camp), pos_ (pos) {
     /*

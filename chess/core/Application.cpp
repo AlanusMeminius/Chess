@@ -1,23 +1,29 @@
 #include "Application.h"
+#include <QDebug>
 
 
-Application::Application(int index) : mode_(index), ui(new Ui::BaseWindow) {
+Application::Application(int index) 
+    : mode_(index)
+    , ui(new Ui::BaseWindow) 
+{
     _init_logic_pieces();
     _init_ui_pieces();
     _init_clicked_signal();
     qDebug() << mode_;
 }
 
-Application::~Application() {
+Application::~Application()
+{
     delete ui;
 }
 
-void Application::show_window() const {
+void Application::show_window() const
+{
     ui->showMainWindow();
 }
 
-
-void Application::_init_logic_pieces() {
+void Application::_init_logic_pieces() 
+{
     /*
      * 根据初始棋盘编码得到逻辑棋子vector
      * */
@@ -33,11 +39,12 @@ void Application::_init_logic_pieces() {
     }
 }
 
-void Application::_init_ui_pieces() {
+void Application::_init_ui_pieces() 
+{
     /*
      * 根据逻辑棋子vector，初始化得到界面棋子vector
      * */
-    for (auto& piece : pieces_)
+    for (auto&& piece : pieces_)
     {
         piece_widgets_.push_back(new Ui::PieceWidget(piece));
         Ui::PieceWidget* p = piece_widgets_.back();
@@ -48,7 +55,8 @@ void Application::_init_ui_pieces() {
     }
 }
 
-void Application::_init_clicked_signal() {
+void Application::_init_clicked_signal() 
+{
     connect(ui->sideBar->subStartPanel->restoreBtn, &QPushButton::clicked, this, &Application::restore);
     connect(ui->sideBar->subStepHistoryPanel->undoBtn, &QPushButton::clicked, this, &Application::undo);
     connect(step_list, &QListWidget::itemDoubleClicked, this, [this] {
@@ -61,7 +69,8 @@ void Application::_init_clicked_signal() {
     });
 }
 
-void Application::_check_first_step(int& pos) {
+void Application::_check_first_step(int& pos) 
+{
     if (_check_role(pos))
     {
         if (_check_camp(pos))
@@ -102,14 +111,16 @@ void Application::_check_second_step(int& pos) {
     }
 }
 
-bool Application::_check_strategy(int& pos) {
+bool Application::_check_strategy(int& pos) 
+{
     Strategy* strategy = StrategyCreator::createStrategy(_role(previous_select_));
     bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
     delete strategy;
     return is_movable_;
 }
 
-void Application::_highlight(int& pos) {
+void Application::_highlight(int& pos) 
+{
     QFile file(piece_pic_[_camp(pos)][_role(pos)]);
     file.open(QIODevice::ReadOnly);
     QByteArray byteArray = file.readAll();
@@ -121,7 +132,8 @@ void Application::_highlight(int& pos) {
     piece_widgets_[pos]->load(h_byteArray);
 }
 
-void Application::_move_pieces(int& previous, int& current) {
+void Application::_move_pieces(int& previous, int& current) 
+{
     // 反转flag
     _reverse_flag();
     ui->campHint->reverse(current_camp_);
@@ -141,7 +153,8 @@ void Application::_move_pieces(int& previous, int& current) {
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
 
-void Application::restore() {
+void Application::restore() 
+{
     for (int i = 0; i < pieces_.size(); i++)
     {
         // 逻辑棋子使用构造函数更新
@@ -154,7 +167,8 @@ void Application::restore() {
     step_list->clear();
 }
 
-void Application::_step_history(const Trace& trace) {
+void Application::_step_history(const Trace& trace) 
+{
     // 1.自己方阵营同类型棋子是否在同一列 -> 前后
     // 2.移动前后位置是否在同一行 -> 平 进退
     // 3.计算距离算进退
@@ -194,7 +208,8 @@ void Application::_step_history(const Trace& trace) {
     trace_vector_.push_back(trace);
 }
 
-void Application::undo() {
+void Application::undo() 
+{
     Trace last = trace_vector_.back();
     _change_nfo(_camp(last[2]), last[1], last[0]);
     piece_widgets_[last[0]]->load(piece_pic_[_camp(last[2])][last[1]]);
