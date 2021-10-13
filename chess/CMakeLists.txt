@@ -12,7 +12,7 @@ set(REQUIRED_LIBS Core Gui Widgets Svg)
 set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Svg)
 
 set(QRC resources/resources.qrc)
-set(UI ui/StartUpWindow.h ui/SideBar.h ui/BaseWindow.h ui/ChessBoard.h)
+set(UI ui/StartUpWindow.h ui/StartUpWindow.cpp ui/SideBar.h ui/SideBar.cpp ui/BaseWindow.h ui/BaseWindow.cpp ui/ChessBoard.h ui/ChessBoard.cpp)
 set(CORE core/Application.cpp core/Application.h core/Piece.cpp core/Piece.h core/Strategy.cpp core/Strategy.h)
 add_executable(${PROJECT_NAME} ${QRC} ${UI} ${CORE} main.cpp)
 

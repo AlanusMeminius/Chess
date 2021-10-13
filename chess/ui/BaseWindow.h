@@ -1,10 +1,12 @@
 #pragma once
+#pragma execution_character_set("utf-8") 
 
 #include <QFile>
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QSystemTrayIcon>
 #include <QtWidgets/QWidget>
+#include <QDebug>
 
 #include "ChessBoard.h"
 #include "SideBar.h"
@@ -14,54 +16,27 @@ QT_BEGIN_NAMESPACE
 namespace Ui {
 
 class BaseWindow final : public QMainWindow {
-Q_OBJECT
+    Q_OBJECT
 private:
     QWidget* centralwidget;
     QHBoxLayout* mainLayout;
+    
 public:
     Ui::ChessBoard* chessBoard;
     Ui::SideBar* sideBar;
     Ui::CampHint* campHint;
     QStatusBar* statusBar;
     QSystemTrayIcon* trayIcon;
+
 public:
     BaseWindow();
-
-    void showMainWindow() {
-        show();
-    }
-
-    void sendMsg(const QString& msg) const {
-        const QString message = tr(" Status Info | ") + msg;
-        statusBar->showMessage(message);
-    }
-
-    void setMainStyle() {
-        QFile styleFile(":/style.qss");
-        styleFile.open(QFile::ReadOnly);
-        const QString style(styleFile.readAll());
-        setStyleSheet(style);
-    }
-
-    void setCampHint() {
-        mainLayout->addWidget(campHint);
-        campHint->setMinimumWidth(5);
-        campHint->setMaximumWidth(20);
-    }
-
-    void setChessBoard()  {
-        chessBoard->setMinimumWidth(500);
-        mainLayout->addWidget(chessBoard);
-    }
-
-    void setSideBar()  {
-        mainLayout->addWidget(sideBar);
-        sideBar->setMaximumWidth(200);
-        sideBar->setMinimumWidth(170);
-    }
-
-    void setSystemTrayIcon() {
-    }
+    void showMainWindow();
+    void sendMsg(const QString& msg);
+    void setMainStyle();
+    void setCampHint();
+    void setChessBoard();
+    void setSideBar();
+    void setSystemTrayIcon();
 };
 
 } // namespace Ui

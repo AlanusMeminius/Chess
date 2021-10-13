@@ -4,6 +4,8 @@
 
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
+#pragma once
+#pragma execution_character_set("utf-8") 
 
 #include <vector>
 #include <string>

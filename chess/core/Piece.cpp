@@ -1,6 +1,7 @@
 //
 // Created by Uniqu on 2/10/2021.
 //
+#pragma execution_character_set("utf-8") 
 
 #include "Piece.h"
 #include <algorithm>

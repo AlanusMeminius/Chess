@@ -1,6 +1,8 @@
 #ifndef CHESS_APPLICATION_H
 #define CHESS_APPLICATION_H
-
+#pragma once
+#pragma execution_character_set("utf-8")
+ 
 #include <QFile>
 #include <iostream>
 #include <tuple>
@@ -9,7 +11,7 @@
 #include "../ui/BaseWindow.h"
 
 class Application : public QObject {
-Q_OBJECT
+    Q_OBJECT
 private:
     const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
                                           "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
@@ -44,14 +46,11 @@ private:
     QListWidget*& step_list = ui->sideBar->subStepHistoryPanel->list; // 初始化顺序未定义
 
 public:
-
     explicit Application(int index);
 
     ~Application() override;
 
     void show_window() const;
-
-private slots:
 
     void piece_click_event(int pos) {
         (is_first_step_) ? _check_first_step(pos) : _check_second_step(pos);
