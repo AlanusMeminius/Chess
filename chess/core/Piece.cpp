@@ -6,14 +6,25 @@
 #include "Piece.h"
 #include <algorithm>
 
-Piece::Piece (char role, bool camp, int pos) : camp_ (camp), pos_ (pos) {
+const std::array<char, 7> Piece::roleChar{ 'k', 'a', 'b', 'n', 'r', 'c', 'p' };
+
+Piece::Piece (char role, Camp camp, int pos) 
+    : camp_(camp)
+    , pos_(pos) 
+{
     /*
      * 将初始化棋盘编码字母所代表的类型转化为int和类型
      * */
-    std::vector<char> types = { 'k', 'a', 'b', 'n', 'r', 'c', 'p' };
-    const auto iter = std::find (types.begin (), types.end (), tolower (role));
-    if (iter != types.end ())
-        role_ = std::distance (std::begin (types), iter); // NOLINT(clang-diagnostic-shorten-64-to-32)
+    const auto iter = std::find(roleChar.begin (), roleChar.end (), tolower(role));
+
+    if (iter != roleChar.end ())
+    {
+        auto role_index = std::distance(std::begin(roleChar), iter); // NOLINT(clang-diagnostic-shorten-64-to-32)
+        role_ = PieceRole(role_index);
+    }  
     else
-        role_ = 7;
+    {
+        role_ = PieceRole::None;
+    }
+        
 }

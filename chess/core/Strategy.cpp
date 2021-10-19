@@ -42,7 +42,7 @@ bool BishopsStrategy::is_movable(int& previous, int& current, std::vector<std::s
     if (std::find(possible_vector_.begin(), possible_vector_.end(), current) != possible_vector_.end())
     {
         /*田字中间是空格*/
-        return (pieces[(previous + current) / 2]->role_ > 6);
+        return (pieces[(previous + current) / 2]->role_ >= PieceRole::None);
     }
     else
     {
@@ -54,12 +54,12 @@ bool HorsesStrategy::is_movable(int& previous, int& current, std::vector<std::sh
     /*如果横向距离为1，竖直距离为2*/
     if (v_distance(previous, current) == 1 && h_distance(previous, current) == 2)
     {
-        return (previous % 9 > current % 9) ? pieces[previous - 1]->role_ > 6 : pieces[previous + 1]->role_ > 6;
+        return (previous % 9 > current % 9) ? pieces[previous - 1]->role_ >= PieceRole::None : pieces[previous + 1]->role_ >= PieceRole::None;
         /*如果横向距离为2，竖直距离为1*/
     }
     else if (v_distance(previous, current) == 2 && h_distance(previous, current) == 1)
     {
-        return (previous / 9 > current / 9) ? pieces[previous - 9]->role_ > 6 : pieces[previous + 9]->role_ > 6;
+        return (previous / 9 > current / 9) ? pieces[previous - 9]->role_ >= PieceRole::None : pieces[previous + 9]->role_ >= PieceRole::None;
     }
     else
     {
@@ -73,7 +73,7 @@ bool ChariotsStrategy::is_movable(int& previous, int& current, std::vector<std::
         int distance = abs(current - previous) < 9 ? 1 : 9;
         for (int i = std::min(previous, current) + distance; i < std::max(previous, current); i += distance)
         {
-            if (pieces[i]->role_ < 7)
+            if (pieces[i]->role_ < PieceRole::None)
                 return false;
         }
         return true;
@@ -91,10 +91,10 @@ bool CannonsStrategy::is_movable(int& previous, int& current, std::vector<std::s
         int count = 0;
         for (int i = std::min(previous, current) + distance; i < std::max(previous, current); i += distance)
         {
-            if (pieces[i]->role_ < 7)
+            if (pieces[i]->role_ < PieceRole::None)
                 count++;
         }
-        if (pieces[current]->role_ < 7 && pieces[current]->camp_ != pieces[previous]->camp_)
+        if (pieces[current]->role_ < PieceRole::None && pieces[current]->camp_ != pieces[previous]->camp_)
             return count == 1;
         return count == 0;
     }
@@ -105,12 +105,12 @@ bool CannonsStrategy::is_movable(int& previous, int& current, std::vector<std::s
 }
 
 bool SoldiersStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
-    if (pieces[previous]->camp_ ? (previous / 9) > 4 : (previous / 9) < 5)
-        return current - previous == (pieces[previous]->camp_ ? -9 : 9);
+    if (bool(pieces[previous]->camp_ )? (previous / 9) > 4 : (previous / 9) < 5)
+        return current - previous == (bool(pieces[previous]->camp_) ? -9 : 9);
     else if (v_distance(previous, current) < 1)
         return h_distance(previous, current) == 1;
     else if (h_distance(previous, current) < 1)
-        return v_coordinate(previous) - v_coordinate(current) == (pieces[previous]->camp_ ? 1 : -1);
+        return v_coordinate(previous) - v_coordinate(current) == (bool(pieces[previous]->camp_) ? 1 : -1);
     else
         return false;
 }

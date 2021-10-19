@@ -24,11 +24,11 @@ Ui::StartUpWindow::StartUpWindow()
     const QString style(styleFile.readAll());
     this->setStyleSheet(style);
     modeList = {
-            {{0, tr("\344\270\216\350\207\252\345\267\261\345\257\271\346\210\230")},
+            {{0, tr("与自己对战")},
                     new QPushButton(horizontalLayoutWidget)},
-            {{1, tr("\344\270\216AI\345\257\271\346\210\230")},
+            {{1, tr("与对战")},
                     new QPushButton(horizontalLayoutWidget)},
-            {{2, tr("\347\275\221\347\273\234\345\257\271\346\210\230")},
+            {{2, tr("网络对战")},
                     new QPushButton(horizontalLayoutWidget)}};
     setUI();
 
@@ -52,7 +52,7 @@ void Ui::StartUpWindow::setUI()
     titleFont.setPointSize(40);
 
     // title
-    titleLabel->setText(tr("\344\270\255\345\233\275<strong>\350\261\241\346\243\213</strong>"));
+    titleLabel->setText(tr("中国<strong>象棋</strong>"));
     titleLabel->setGeometry(QRect(190, 50, 280, 65));
     titleLabel->setFont(titleFont);
     titleLabel->setAlignment(Qt::AlignCenter);
@@ -115,7 +115,7 @@ SetUp::SetUp()
         });
     }
 
-    connect(this, SIGNAL (btnIndex(int)), this, SLOT (setUpMainWindow(int)));
+    connect(this, &SetUp::btnIndex, this, &SetUp::setUpMainWindow);
     startUpWindow->show();
 }
 

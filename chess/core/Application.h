@@ -9,15 +9,16 @@
 #include <QListWidgetItem>
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
+#include "Piece.h"
 
 class Application : public QObject {
     Q_OBJECT
 private:
     const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
                                           "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
-    std::map<bool, std::vector<QString>> piece_pic_{
-            {false, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
-            {true,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
+    std::map<Camp, std::vector<QString>> piece_pic_{
+            {Camp::Red, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
+            {Camp::Black,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
     };
     [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
             "將", "士", "象", "馬", "車", "砲", "卒",
@@ -28,7 +29,8 @@ private:
             "1", "2", "3", "4", "5", "6", "7", "8", "9",
             "一", "二", "三", "四", "五", "六", "七", "八", "九"
     };
-    typedef std::array<int, 4> Trace;
+    
+    typedef std::array<TraceUnit, 2> Trace;
     std::vector<Trace> trace_vector_;
     std::vector<QString> kifu_vector_;
 
@@ -36,7 +38,7 @@ private:
     int mode_;
     bool is_first_step_ = true;
     int previous_select_ = -1;
-    bool current_camp_ = true;
+    Camp current_camp_ = Camp::Black;
 
 private:
     Ui::BaseWindow* ui;
@@ -65,20 +67,20 @@ private:
     /*
      * 帮助函数，重用
      * */
-    inline bool _check_role(int &pos) const { return (_role(pos) < 7); }
+    inline bool _check_role(int &pos) const { return (_role(pos) < PieceRole::None); }
 
     inline bool _check_camp(int &pos) const { return (_camp(pos) == current_camp_); }
 
-    [[nodiscard]] inline bool _camp(const int &pos) const { return pieces_[pos]->camp_; }
+    [[nodiscard]] inline Camp _camp(const int &pos) const { return pieces_[pos]->camp_; }
 
-    [[nodiscard]] inline int _role(const int &pos) const { return pieces_[pos]->role_; }
+    [[nodiscard]] inline PieceRole _role(const int &pos) const { return pieces_[pos]->role_; }
 
     inline void _reverse_flag() {
         is_first_step_ = !is_first_step_;
         current_camp_ = !current_camp_;
     }
 
-    inline void _change_nfo(const bool &camp, const int &role, const int &pos) {
+    inline void _change_nfo(const Camp& camp, const PieceRole& role, const int& pos) {
         pieces_[pos]->camp_ = camp;
         pieces_[pos]->role_ = role;
     }

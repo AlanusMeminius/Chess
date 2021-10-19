@@ -9,7 +9,7 @@ SideBarComponent::TimeRecord::TimeRecord(QObject* object)
     , total(0)
 {
     showTimer->setInterval(100);
-    connect(showTimer, &QTimer::timeout, this, [this]() {
+    connect(showTimer, &QTimer::timeout, this, [&]() {
         *qTime = QTime::currentTime();
         secs = -(qTime->secsTo(startTime));
         if (secs > 180)
@@ -62,7 +62,7 @@ SideBarComponent::SubStartPanel::SubStartPanel()
 
     // add time record label
     timeRecordLabel = new CustomLabel(
-        layout, "timeRecordLabel", "\u5f00\u59cb\u5bf9\u6218", 30
+        layout, "timeRecordLabel", "开始对战", 30
     );
 
     timeRecordLabel->setFont(boldFont);

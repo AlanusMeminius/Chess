@@ -26,7 +26,7 @@ public:
     QWidget* horizontalLayoutWidget;
     QHBoxLayout* horizontalLayout;
     std::map<std::pair<int, QString>, QPushButton*> modeList;
-    QProgressBar* progressBar;
+    QProgressBar* progressBar; // 进度条                       
     QLabel* loadingLabel;
     //        QLabel *createdLabel;
     QTimer* timer;
@@ -41,7 +41,7 @@ public:
 
 QT_END_NAMESPACE
 
-class SetUp : QObject 
+class SetUp : public QObject 
 {
     Q_OBJECT
 public:

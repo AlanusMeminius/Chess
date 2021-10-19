@@ -16,9 +16,9 @@ public:
 
 class GeneralsStrategy : public Strategy {
 private:
-    std::map<bool, std::vector<int>> possible_{
-            {false, {3,  4,  5,  12, 13, 14, 21, 22, 23}},
-            {true,  {66, 67, 68, 75, 76, 78, 84, 85, 86}}
+    std::map<Camp, std::vector<int>> possible_{
+            {Camp::Red,  {3,  4,  5,  12, 13, 14, 21, 22, 23}},
+            {Camp::Black, {66, 67, 68, 75, 76, 78, 84, 85, 86}}
     };
 public:
     bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
@@ -26,8 +26,8 @@ public:
 
 class AdvisorsStrategy : public Strategy {
 private:
-    std::map<bool, std::map<int, std::vector<int>>> possible_{
-            {false, {
+    std::map<Camp, std::map<int, std::vector<int>>> possible_{
+            {Camp::Red, {
                             {3,  {13}},
                             {5,  {13}},
                             {13, {3,  5,  21, 23}},
@@ -35,7 +35,7 @@ private:
                             {23, {13}}
                     },
             },
-            {true,  {
+            {Camp::Black,  {
                             {66, {76}},
                             {68, {76}},
                             {76, {66, 68, 84, 86}},
@@ -49,9 +49,9 @@ public:
 };
 
 class BishopsStrategy : public Strategy {
-    std::map<bool, std::vector<int>> possible_{
-            {false, {2,  6,  18, 22, 26, 38, 42}},
-            {true,  {47, 51, 63, 67, 71, 83, 87}}
+    std::map<Camp, std::vector<int>> possible_{
+            {Camp::Red, {2,  6,  18, 22, 26, 38, 42}},
+            {Camp::Black,  {47, 51, 63, 67, 71, 83, 87}}
     };
 public:
     bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
@@ -79,21 +79,21 @@ public:
 
 class StrategyCreator {
 public:
-    static Strategy* createStrategy(int type) {
-        switch (type) {
-            case 0:
+    static Strategy* createStrategy(PieceRole role) {
+        switch (role) {
+            case PieceRole::Generals:
                 return new GeneralsStrategy();
-            case 1:
+            case PieceRole::Advisors:
                 return new AdvisorsStrategy();
-            case 2:
+            case PieceRole::Bishops:
                 return new BishopsStrategy();
-            case 3:
+            case PieceRole::Horses:
                 return new HorsesStrategy();
-            case 4:
+            case PieceRole::Chariots:
                 return new ChariotsStrategy();
-            case 5:
+            case PieceRole::Cannons:
                 return new CannonsStrategy();
-            case 6:
+            case PieceRole::Soldiers:
                 return new SoldiersStrategy();
             default:
                 return nullptr;
