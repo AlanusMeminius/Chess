@@ -118,9 +118,8 @@ void Application::_check_second_step(int& pos) {
 
 bool Application::_check_strategy(int& pos) 
 {
-    Strategy* strategy = StrategyCreator::createStrategy(_role(previous_select_));
+    std::shared_ptr<Strategy> strategy = StrategyCreator::createStrategy(_role(previous_select_));
     bool is_movable_ = strategy->is_movable(previous_select_, pos, pieces_);
-    delete strategy;
     return is_movable_;
 }
 

@@ -5,6 +5,7 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 #include "Piece.h"
 
 class Strategy {
@@ -79,22 +80,22 @@ public:
 
 class StrategyCreator {
 public:
-    static Strategy* createStrategy(PieceRole role) {
+    static std::shared_ptr<Strategy> createStrategy(PieceRole role) {
         switch (role) {
             case PieceRole::Generals:
-                return new GeneralsStrategy();
+                return std::make_shared<GeneralsStrategy>();
             case PieceRole::Advisors:
-                return new AdvisorsStrategy();
+                return std::make_shared<AdvisorsStrategy>();
             case PieceRole::Bishops:
-                return new BishopsStrategy();
+                return std::make_shared<BishopsStrategy>();
             case PieceRole::Horses:
-                return new HorsesStrategy();
+                return std::make_shared<HorsesStrategy>();
             case PieceRole::Chariots:
-                return new ChariotsStrategy();
+                return std::make_shared<ChariotsStrategy>();
             case PieceRole::Cannons:
-                return new CannonsStrategy();
+                return std::make_shared<CannonsStrategy>();
             case PieceRole::Soldiers:
-                return new SoldiersStrategy();
+                return std::make_shared<SoldiersStrategy>();
             default:
                 return nullptr;
         }

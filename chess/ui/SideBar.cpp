@@ -90,7 +90,7 @@ SideBarComponent::SubStartPanel::SubStartPanel()
     restoreBtn->setMinimumHeight(25);
     firstBtnLayout->addWidget(restoreBtn);
 
-    connect(restoreBtn, &QPushButton::click, timeRecord, [=]() {
+    connect(restoreBtn, &QPushButton::clicked, timeRecord, [&]() {
         timeRecord->reset();
         timeRecord->showTimer->stop();
     }, Qt::DirectConnection);

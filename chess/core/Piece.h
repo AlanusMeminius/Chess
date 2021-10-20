@@ -59,6 +59,8 @@
 // 	return a != A(b);
 // }
 
+class Strategy;
+
 enum class PieceRole {
     Generals,     // 将
     Advisors,     // 士
@@ -109,9 +111,11 @@ public:
 
 public:
     Piece(char role, Camp camp, int pos);
+    void set_strategy(std::shared_ptr<Strategy> strategy) { _strategy = strategy; }
 
 private:
-    static const std::array<char, 7> roleChar;
+    static const std::array<char, 7> _roleChar;
+    std::shared_ptr<Strategy> _strategy;
 };
 
 #endif //CHESS_PIECE_H
