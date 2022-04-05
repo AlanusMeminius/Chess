@@ -130,6 +130,7 @@ void Application::_highlight(int& pos)
     QFile file(piece_pic_[_camp(pos)][int(_role(pos))]);
     file.open(QIODevice::ReadOnly);
     QByteArray byteArray = file.readAll();
+    file.close();
     // 读取svg文件为一个QString
     QString string = QString(byteArray);
     // 替换颜色
@@ -145,6 +146,7 @@ void Application::_move_pieces(int& previous, int& current)
     ui->campHint->reverse(bool(current_camp_));
     ui->sideBar->subStartPanel->timeRecord->reverse();
 
+    // 记录棋谱
     Trace trace{{{previous, _role(previous)}, {current, _role(current)}}};
     _step_history(trace);
 
@@ -152,10 +154,12 @@ void Application::_move_pieces(int& previous, int& current)
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][int(_role(previous))]);
 
     // 变更现在位置逻辑棋子的信息
-    _change_nfo(_camp(previous), _role(previous), current);
+    _change_info(_camp(previous), _role(previous), current);
+
+    pieces_[previous]->camp_ = Camp::White;
+    pieces_[previous]->role_ = PieceRole::None;
 
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
-    pieces_[previous]->role_ = PieceRole::None;
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 }
 
@@ -173,6 +177,11 @@ void Application::restore()
     step_list->clear();
 }
 
+// 第一个字表示需要移动的棋子
+// 第二个字表示移动的棋子所在的直线编码(红黑方均为由己方底线从右向左数)，红方用汉字一到九，黑方用阿拉伯数字1到9表示。当同一直线上有两个相同的棋子，则采用前、后来区别。如“后车平四”，“前马进7”
+// 第三个字表示棋子移动的方向，横走用”平“，向对方底线前进用”进“，向己方底线后退用”退“。
+// 第四个字分为两类：棋子在直线上进退时，表示棋子进退的步数;当棋子平走或斜走的时候，表示所到达直线的编号。
+
 void Application::_step_history(const Trace& trace) 
 {
     // 1.自己方阵营同类型棋子是否在同一列 -> 前后
@@ -183,33 +192,41 @@ void Application::_step_history(const Trace& trace)
     QString former_;
     QString new_;
 
+    // 得到相关信息
     Camp camp = _camp(trace[0].pos);
     int column = trace[0].pos % 9;
     int column_distance_ = trace[0].pos / 9 - trace[1].pos / 9;
 
+    // 先组装前半部分
+    QString character = piece_character_[int(camp)][int(trace[0].role)];
+    former_ = character + _number_string[int(camp)][bool(camp) ? (8 - column) : (column)];
+
+    // 查找是否分前后
     for (int k = column; k < 90; k += 9)
     {
         if (k == trace[0].pos)
             continue;
-        QString character = piece_character_[int(camp)][int(trace[0].role)];
-        if (_camp(k) == camp && _role(k) == trace[1].role)
+        
+        if (_camp(k) == camp && _role(k) == trace[0].role)
         {
             if (k < trace[0].pos)
                 former_ = tr("前") + character;
             else
                 former_ = tr("后") + character;
-        }
-        else
-        {
-            former_ = character + _number_string[int(camp)][bool(camp) ? (8 - column) : (column)];
+            break;
         }
     }
 
+    // 后组装后半部分
+    int columnAfter = trace[1].pos % 9;
+    bool isRow = trace[0].pos % 9 - trace[1].pos % 9;
     if (column_distance_ != 0)
         new_ = (column_distance_ > 0 ? (bool(camp) ? tr("进") : tr("退")) : (bool(camp) ? tr("退") : tr("进")))
-            + _number_string[int(camp)][abs(column_distance_) - 1];
+            + ( isRow == 0 ? _number_string[int(camp)][abs(column_distance_) - 1] : _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)]);
     else
-        new_ = tr("平") + _number_string[int(camp)][bool(camp) ? (8 - column) : (column)];
+        new_ = tr("平") + _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)];
+        
+    // 
     step_list->addItem(former_ + new_);
     trace_vector_.push_back(trace);
 }
@@ -222,12 +239,12 @@ void Application::undo()
     }
     
     Trace last = trace_vector_.back();
-    _change_nfo(_camp(last[1].pos), last[0].role, last[0].pos);
+    _change_info(_camp(last[1].pos), last[0].role, last[0].pos);
     piece_widgets_[last[0].pos]->load(piece_pic_[_camp(last[1].pos)][int(last[0].role)]);
     piece_widgets_[last[1].pos]->load(
         (last[1].role < PieceRole::None) ? piece_pic_[_camp(last[1].pos)][int(last[1].role)] : ":/blank.svg"
     );
-    _change_nfo(!_camp(last[1].pos), last[1].role, last[1].pos);
+    _change_info(!_camp(last[1].pos), last[1].role, last[1].pos);
     _reverse_flag();
     previous_select_ = last[0].pos;
     ui->campHint->reverse(bool(current_camp_));

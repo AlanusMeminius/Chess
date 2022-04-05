@@ -4,11 +4,12 @@
 #pragma once
 #pragma execution_character_set("utf-8")
 
- 
-#include <QFile>
 #include <iostream>
 #include <tuple>
+
 #include <QListWidgetItem>
+#include <QFile>
+
 #include "Strategy.h"
 #include "../ui/BaseWindow.h"
 #include "Piece.h"
@@ -50,7 +51,7 @@ private:
             "將", "士", "象", "馬", "車", "砲", "卒",
             "帥", "仕", "相", "傌", "俥", "炮", "兵",
     };
-    
+
     [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
             "1", "2", "3", "4", "5", "6", "7", "8", "9",
             "一", "二", "三", "四", "五", "六", "七", "八", "九"
@@ -64,7 +65,7 @@ private:
     Mode mode_;                                                       // 对战模式
     bool is_first_step_ = true;                                       // 是否是第一步
     int previous_select_ = -1;                                        // 前一步选中
-    Camp current_camp_ = Camp::Black;                                 // 当前红黑方
+    Camp current_camp_ = Camp::Black;                                 // 当前行走方
 
 private:
     Ui::BaseWindow* ui;                                               // ui界面
@@ -91,7 +92,7 @@ private:
         current_camp_ = !current_camp_;
     }
 
-    inline void _change_nfo(const Camp& camp, const PieceRole& role, const int& pos) {
+    inline void _change_info(const Camp& camp, const PieceRole& role, const int& pos) {
         pieces_[pos]->camp_ = camp;
         pieces_[pos]->role_ = role;
     }
