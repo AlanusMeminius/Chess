@@ -13,11 +13,13 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace Ui {
+namespace Ui 
+{
 /*
 * 行进方阵营标记
 * */
-class CampHint final : public QWidget {
+class CampHint final : public QWidget 
+{
     Q_OBJECT
 public:
     QPropertyAnimation* animation;
@@ -31,7 +33,8 @@ public:
 /*
 * 棋子控件，加载棋子图片
 * */
-class PieceWidget final : public QSvgWidget {
+class PieceWidget final : public QSvgWidget 
+{
     Q_OBJECT
 public:
     std::shared_ptr<Piece> logicPiece;
@@ -57,8 +60,9 @@ public:
 /*
 * 棋盘主控件，重写resizeEvent，使子控件->棋盘控件保持比例
 * */
-class ChessBoard final : public QWidget {
-Q_OBJECT
+class ChessBoard final : public QWidget 
+{
+    Q_OBJECT
 private:
     int widthRatio;
     int heightRatio;

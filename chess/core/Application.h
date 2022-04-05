@@ -16,42 +16,14 @@
 class Application : public QObject 
 {
     Q_OBJECT
-private:
-    const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
-                                          "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
-    std::map<Camp, std::vector<QString>> piece_pic_{
-            {Camp::Red, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
-            {Camp::Black,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
-    };
-    [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
-            "將", "士", "象", "馬", "車", "砲", "卒",
-            "帥", "仕", "相", "傌", "俥", "炮", "兵",
-    };
-
-    [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
-            "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "一", "二", "三", "四", "五", "六", "七", "八", "九"
-    };
-    
-    typedef std::array<TraceUnit, 2> Trace;
-    std::vector<Trace> trace_vector_;
-    std::vector<QString> kifu_vector_;
-
-private:
-    int mode_;
-    bool is_first_step_ = true;
-    int previous_select_ = -1;
-    Camp current_camp_ = Camp::Black;
-
-private:
-    Ui::BaseWindow* ui;
-    std::vector<char> board_;
-    std::vector<std::shared_ptr<Piece>> pieces_;
-    std::vector<Ui::PieceWidget*> piece_widgets_;
-    QListWidget*& step_list = ui->sideBar->subStepHistoryPanel->list; // 初始化顺序未定义
-
 public:
-    explicit Application(int index);
+    enum Mode {
+        SigleMode,
+        NetworkMode, 
+        AiExercise
+    };
+
+    explicit Application(Mode mode);
 
     ~Application() override;
 
@@ -64,6 +36,42 @@ public:
     void restore();
 
     void undo();
+
+private:
+    const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"
+                                          "000000000/P0P0P0P0P/0C00000C0/000000000/RNBAKABNR/";
+    std::map<Camp, std::vector<QString>> piece_pic_{
+            {Camp::Red, {":/bk.svg", ":/ba.svg", ":/bb.svg", ":/bn.svg", ":/br.svg", ":/bc.svg", ":/bp.svg"}},
+            {Camp::Black,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
+    };
+
+    // 棋谱记录
+    [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
+            "將", "士", "象", "馬", "車", "砲", "卒",
+            "帥", "仕", "相", "傌", "俥", "炮", "兵",
+    };
+    
+    [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
+            "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "一", "二", "三", "四", "五", "六", "七", "八", "九"
+    };
+    
+    typedef std::array<TraceUnit, 2> Trace;
+    std::vector<Trace> trace_vector_;
+    std::vector<QString> kifu_vector_;
+
+private:
+    Mode mode_;                                                       // 对战模式
+    bool is_first_step_ = true;                                       // 是否是第一步
+    int previous_select_ = -1;                                        // 前一步选中
+    Camp current_camp_ = Camp::Black;                                 // 当前红黑方
+
+private:
+    Ui::BaseWindow* ui;                                               // ui界面
+    std::vector<char> board_;                                         // 初始化字符
+    std::vector<std::shared_ptr<Piece>> pieces_;                      // 逻辑棋子数组
+    std::vector<Ui::PieceWidget*> piece_widgets_;                     // 界面棋子
+    QListWidget*& step_list = ui->sideBar->subStepHistoryPanel->list; // 初始化顺序未定义
 
 private:
 

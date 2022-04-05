@@ -6,8 +6,8 @@
 #include "../ui/ChessBoard.h"
 
 
-Application::Application(int index) 
-    : mode_(index)
+Application::Application(Mode mode) 
+    : mode_(mode)
     , ui(new Ui::BaseWindow) 
 {
     _init_logic_pieces();

@@ -127,9 +127,9 @@ SetUp::~SetUp()
 
 void SetUp::setUpMainWindow(int select)
 {
-    application = new Application(select);
-    if (startUpWindow->exec() == QDialog::Accepted)
-    {
-        application->show_window();
-    }
+    // application = new Application(select);
+    // if (startUpWindow->exec() == QDialog::Accepted)
+    // {
+    //     application->show_window();
+    // }
 }
