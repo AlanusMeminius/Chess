@@ -125,6 +125,34 @@ bool Application::_check_strategy(int& pos)
     return is_movable_;
 }
 
+bool Application::_checkmate()
+{
+    // 找到敌方正英的将军
+    int emleGeneral = 0;
+    for(const auto piece : pieces_)
+    {
+        if(piece->camp_ == current_camp_ && piece->role_ == PieceRole::Generals)
+        {
+            emleGeneral = piece->pos_;
+            break;
+        }
+    }
+
+    // 判断是否可以将军
+    for(const auto piece : pieces_)
+    {
+        if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ >= PieceRole::Soldiers)
+        {
+            if(piece->is_movable(emleGeneral, pieces_))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void Application::_highlight(int& pos) 
 {
     QFile file(piece_pic_[_camp(pos)][int(_role(pos))]);
@@ -161,6 +189,11 @@ void Application::_move_pieces(int& previous, int& current)
 
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
     piece_widgets_[previous]->load(QString(":/blank.svg"));
+
+    if(_checkmate())
+    {
+        qDebug() << "将军";
+    }
 }
 
 void Application::restore() 
@@ -222,11 +255,11 @@ void Application::_step_history(const Trace& trace)
     bool isRow = trace[0].pos % 9 - trace[1].pos % 9;
     if (column_distance_ != 0)
         new_ = (column_distance_ > 0 ? (bool(camp) ? tr("进") : tr("退")) : (bool(camp) ? tr("退") : tr("进")))
-            + ( isRow == 0 ? _number_string[int(camp)][abs(column_distance_) - 1] : _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)]);
+            + (isRow == 0 ? _number_string[int(camp)][abs(column_distance_) - 1] : _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)]);
     else
         new_ = tr("平") + _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)];
         
-    // 
+    // 加入到走法记录里面
     step_list->addItem(former_ + new_);
     trace_vector_.push_back(trace);
 }
