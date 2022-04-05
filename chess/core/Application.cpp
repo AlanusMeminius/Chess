@@ -1,7 +1,9 @@
 #pragma execution_character_set("utf-8") 
 
-#include "Application.h"
 #include <QDebug>
+
+#include "Application.h"
+#include "../ui/ChessBoard.h"
 
 
 Application::Application(int index) 
@@ -214,6 +216,11 @@ void Application::_step_history(const Trace& trace)
 
 void Application::undo() 
 {
+    if(trace_vector_.empty())
+    {
+        return ;
+    }
+    
     Trace last = trace_vector_.back();
     _change_nfo(_camp(last[1].pos), last[0].role, last[0].pos);
     piece_widgets_[last[0].pos]->load(piece_pic_[_camp(last[1].pos)][int(last[0].role)]);

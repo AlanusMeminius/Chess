@@ -12,9 +12,11 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QListWidget>
 
-namespace SideBarComponent {
+namespace SideBarComponent 
+{
 
-class CustomLabel final : public QLabel {
+class CustomLabel final : public QLabel 
+{
     Q_OBJECT
 public:
     CustomLabel(QVBoxLayout* layout, const QString& objName, const QString& label, const int& minimumHeight) {
@@ -25,15 +27,12 @@ public:
     }
 };
 
-class TimeRecord final : public QLabel {
+class TimeRecord final : public QLabel 
+{
     Q_OBJECT
 public:
     QTime* qTime;
     QTimer* showTimer;
-    // 初始化 showTime->start(100)
-    // 改变阵营改变 startTime
-    // 对局结束 showTime->stop()
-    // 一定时间提醒一下 直接在
 
 public:
     explicit TimeRecord(QObject* object= nullptr);
@@ -52,7 +51,8 @@ private:
     QString _set_text(int& secs_);
 };
 
-class SubStartPanel final : public QWidget {
+class SubStartPanel final : public QWidget 
+{
     Q_OBJECT
 public:
     QFont boldFont;
@@ -67,7 +67,8 @@ public:
     SubStartPanel();
 };
 
-class SubStepHistoryPanel final : public QWidget {
+class SubStepHistoryPanel final : public QWidget 
+{
     Q_OBJECT
 public:
     QFont boldFont;
@@ -79,7 +80,8 @@ public:
     SubStepHistoryPanel();
 };
 
-class SubFightHistoryPanel final : public QWidget {
+class SubFightHistoryPanel final : public QWidget 
+{
     Q_OBJECT
 public:
     QFont boldFont;
@@ -90,7 +92,8 @@ public:
     SubFightHistoryPanel();
 };
 
-class SettingWidget final : public QWidget {
+class SettingWidget final : public QWidget 
+{
     Q_OBJECT
 public:
     QVBoxLayout* mainLayout;
@@ -103,7 +106,8 @@ public:
     SettingWidget();
 };
 
-class SubSettingPanel final : public QWidget {
+class SubSettingPanel final : public QWidget 
+{
     Q_OBJECT
 public:
     QVBoxLayout* settingPanelLayout;
@@ -126,7 +130,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Ui {
 
-class SideBar final : public QWidget {
+class SideBar final : public QWidget 
+{
     Q_OBJECT
 public:
     QVBoxLayout* sideBarLayout;

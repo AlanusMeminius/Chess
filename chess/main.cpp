@@ -1,4 +1,5 @@
 #include <QApplication>
+
 #include "ui/StartUpWindow.h"
 #include "core/Application.h"
 #define DEBUG

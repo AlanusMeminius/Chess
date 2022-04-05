@@ -1,7 +1,9 @@
 #ifndef CHESS_APPLICATION_H
 #define CHESS_APPLICATION_H
+
 #pragma once
 #pragma execution_character_set("utf-8")
+
  
 #include <QFile>
 #include <iostream>
@@ -11,7 +13,8 @@
 #include "../ui/BaseWindow.h"
 #include "Piece.h"
 
-class Application : public QObject {
+class Application : public QObject 
+{
     Q_OBJECT
 private:
     const std::string init_chess_board_ = "rnbakabnr/000000000/0c00000c0/p0p0p0p0p/000000000/"

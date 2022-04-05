@@ -28,7 +28,6 @@ public:
     std::map<std::pair<int, QString>, QPushButton*> modeList;
     QProgressBar* progressBar; // 进度条                       
     QLabel* loadingLabel;
-    //        QLabel *createdLabel;
     QTimer* timer;
 public:
     StartUpWindow();

@@ -2,6 +2,7 @@
 
 #include "Strategy.h"
 #include <algorithm>
+namespace {
 
 inline int v_coordinate(int& a) { return a / 9; }
 
@@ -22,6 +23,8 @@ inline bool is_same_straight_line(int& a, int& b) {
 inline int linear_distance(int& a, int& b) {
     return (v_distance(a, b) > 0) ? v_distance(a, b) : abs(a - b);
 }
+
+} // 匿名空间
 
 bool GeneralsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
     std::vector possible_vector_ = possible_[pieces[previous]->camp_];

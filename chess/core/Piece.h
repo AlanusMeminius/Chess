@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <array>
 
 // template<typename A, typename B,
 // 	std::enable_if_t<std::is_integral<A>::value || std::is_enum<A>::value> * = nullptr,
@@ -111,7 +112,7 @@ public:
 
 public:
     Piece(char role, Camp camp, int pos);
-    void set_strategy(std::shared_ptr<Strategy> strategy) { _strategy = strategy; }
+    void set_strategy(const std::shared_ptr<Strategy>& strategy) { _strategy = strategy; }
 
 private:
     static const std::array<char, 7> _roleChar;
