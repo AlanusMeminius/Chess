@@ -33,7 +33,8 @@ Ui::BaseWindow::BaseWindow()
     setStatusBar(statusBar);
 }
 
-void Ui::BaseWindow::showMainWindow() {
+void Ui::BaseWindow::showMainWindow() 
+{
     show();
 }
 
@@ -43,7 +44,8 @@ void Ui::BaseWindow::sendMsg(const QString& msg)
     statusBar->showMessage(message);
 }
 
-void Ui::BaseWindow::setMainStyle() {
+void Ui::BaseWindow::setMainStyle() 
+{
     QFile styleFile(":/style.qss");
     if (styleFile.open(QFile::ReadOnly))
     {
@@ -56,22 +58,26 @@ void Ui::BaseWindow::setMainStyle() {
     }
 }
 
-void Ui::BaseWindow::setCampHint() {
+void Ui::BaseWindow::setCampHint() 
+{
     mainLayout->addWidget(campHint);
     campHint->setMinimumWidth(5);
     campHint->setMaximumWidth(20);
 }
 
-void Ui::BaseWindow::setChessBoard()  {
+void Ui::BaseWindow::setChessBoard()  
+{
     chessBoard->setMinimumWidth(500);
     mainLayout->addWidget(chessBoard);
 }
 
-void Ui::BaseWindow::setSideBar()  {
+void Ui::BaseWindow::setSideBar()  
+{
     mainLayout->addWidget(sideBar);
     sideBar->setMaximumWidth(200);
     sideBar->setMinimumWidth(170);
 }
 
-void Ui::BaseWindow::setSystemTrayIcon() {
+void Ui::BaseWindow::setSystemTrayIcon() 
+{
 }

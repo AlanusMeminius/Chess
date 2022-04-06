@@ -113,6 +113,7 @@ public:
 public:
     Piece(char role, Camp camp, int pos);
     void set_strategy(const std::shared_ptr<Strategy>& strategy) { _strategy = strategy; }
+    bool is_movable(int, const std::vector<std::shared_ptr<Piece>>& );
 
 private:
     static const std::array<char, 7> _roleChar;

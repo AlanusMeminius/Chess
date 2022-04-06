@@ -121,7 +121,7 @@ SideBarComponent::SubStepHistoryPanel::SubStepHistoryPanel()
     layout = new QVBoxLayout;
     setLayout(layout);
 
-    label = new CustomLabel(layout, "stepHistoryLabel", "着法记录", 30);
+    label = new CustomLabel(layout, "stepHistoryLabel", "走法记录", 30);
     boldFont.setPointSize(10);
     label->setFont(boldFont);
 

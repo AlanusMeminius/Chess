@@ -15,18 +15,21 @@ inline int v_distance(int& a, int& b) { return abs(v_coordinate(a) - v_coordinat
 inline int h_distance(int& a, int& b) { return abs(h_coordinate(a) - h_coordinate(b)); }
 
 /*检查两个点是否在同一条直线上*/
-inline bool is_same_straight_line(int& a, int& b) {
+inline bool is_same_straight_line(int& a, int& b) 
+{
     return (v_distance(a, b) < 1 || h_distance(a, b) < 1);
 }
 
 /*计算两个点在同一条直线上的距离*/
-inline int linear_distance(int& a, int& b) {
+inline int linear_distance(int& a, int& b) 
+{
     return (v_distance(a, b) > 0) ? v_distance(a, b) : abs(a - b);
 }
 
 } // 匿名空间
 
-bool GeneralsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool GeneralsStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     std::vector possible_vector_ = possible_[pieces[previous]->camp_];
     if (std::find(possible_vector_.begin(), possible_vector_.end(), current) != possible_vector_.end())
         /*如果在横线或者竖线上，而且距离小于2 */
@@ -35,12 +38,14 @@ bool GeneralsStrategy::is_movable(int& previous, int& current, std::vector<std::
         return false;
 }
 
-bool AdvisorsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool AdvisorsStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     std::vector possible_vector_ = possible_[pieces[previous]->camp_][previous];
     return std::find(possible_vector_.begin(), possible_vector_.end(), current) != possible_vector_.end();
 }
 
-bool BishopsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool BishopsStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     std::vector possible_vector_ = possible_[pieces[previous]->camp_];
     if (std::find(possible_vector_.begin(), possible_vector_.end(), current) != possible_vector_.end())
     {
@@ -53,7 +58,8 @@ bool BishopsStrategy::is_movable(int& previous, int& current, std::vector<std::s
     }
 }
 
-bool HorsesStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool HorsesStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     /*如果横向距离为1，竖直距离为2*/
     if (v_distance(previous, current) == 1 && h_distance(previous, current) == 2)
     {
@@ -70,7 +76,8 @@ bool HorsesStrategy::is_movable(int& previous, int& current, std::vector<std::sh
     }
 }
 
-bool ChariotsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool ChariotsStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     if (is_same_straight_line(previous, current))
     {
         int distance = abs(current - previous) < 9 ? 1 : 9;
@@ -87,7 +94,8 @@ bool ChariotsStrategy::is_movable(int& previous, int& current, std::vector<std::
     }
 }
 
-bool CannonsStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool CannonsStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     if (is_same_straight_line(previous, current))
     {
         int distance = abs(current - previous) < 9 ? 1 : 9;
@@ -107,7 +115,8 @@ bool CannonsStrategy::is_movable(int& previous, int& current, std::vector<std::s
     }
 }
 
-bool SoldiersStrategy::is_movable(int& previous, int& current, std::vector<std::shared_ptr<Piece>>& pieces) {
+bool SoldiersStrategy::is_movable(int& previous, int& current, const std::vector<std::shared_ptr<Piece>>& pieces) 
+{
     if (bool(pieces[previous]->camp_ )? (previous / 9) > 4 : (previous / 9) < 5)
         return current - previous == (bool(pieces[previous]->camp_) ? -9 : 9);
     else if (v_distance(previous, current) < 1)

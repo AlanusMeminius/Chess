@@ -66,6 +66,7 @@ private:
     bool is_first_step_ = true;                                       // 是否是第一步
     int previous_select_ = -1;                                        // 前一步选中
     Camp current_camp_ = Camp::Black;                                 // 当前行走方
+    bool is_checkmate_ = false;                                       // 当前是否处于将军状态
 
 private:
     Ui::BaseWindow* ui;                                               // ui界面
@@ -112,6 +113,10 @@ private:
     void _check_second_step(int &);
 
     bool _check_strategy(int &);
+    
+    bool _checkmate();
+
+    bool _checkvictory();
 
     /*
      * ui界面改变

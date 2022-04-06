@@ -13,7 +13,8 @@ class Strategy {
 public:
     virtual ~Strategy() = default;
 
-    virtual bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) = 0;
+    virtual bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) = 0;
+    virtual std::vector<int> get_possible_pos() {}
 };
 
 class GeneralsStrategy : public Strategy {
@@ -23,7 +24,7 @@ private:
             {Camp::Black, {66, 67, 68, 75, 76, 78, 84, 85, 86}}
     };
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class AdvisorsStrategy : public Strategy {
@@ -47,7 +48,7 @@ private:
             }
     };
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>& ) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>& ) override;
 };
 
 class BishopsStrategy : public Strategy {
@@ -56,27 +57,27 @@ class BishopsStrategy : public Strategy {
             {Camp::Black,  {47, 51, 63, 67, 71, 83, 87}}
     };
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class HorsesStrategy : public Strategy {
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class ChariotsStrategy : public Strategy {
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class CannonsStrategy : public Strategy {
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class SoldiersStrategy : public Strategy {
 public:
-    bool is_movable(int&, int&, std::vector<std::shared_ptr<Piece>>&) override;
+    bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
 };
 
 class StrategyCreator {

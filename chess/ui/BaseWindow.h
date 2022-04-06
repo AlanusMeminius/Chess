@@ -15,7 +15,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Ui {
 
-class BaseWindow final : public QMainWindow {
+class BaseWindow final : public QMainWindow 
+{
     Q_OBJECT
 private:
     QWidget* centralwidget;

@@ -4,6 +4,7 @@
 #pragma execution_character_set("utf-8") 
 
 #include "Piece.h"
+#include "Strategy.h"
 #include <algorithm>
 
 const std::array<char, 7> Piece::_roleChar{ 'k', 'a', 'b', 'n', 'r', 'c', 'p' };
@@ -27,4 +28,14 @@ Piece::Piece (char role, Camp camp, int pos)
         role_ = PieceRole::None;
     }
         
+}
+
+bool Piece::is_movable(int destion, const std::vector<std::shared_ptr<Piece>>& pieces)
+{
+    if(_strategy.get() == nullptr)
+    {
+        return false;
+    }
+
+    return _strategy->is_movable(pos_, destion, pieces);
 }

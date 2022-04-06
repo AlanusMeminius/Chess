@@ -38,6 +38,7 @@ void Application::_init_logic_pieces()
         {
             board_.emplace_back(item);
             pieces_.push_back(std::make_shared<Piece>(item, Camp(isupper(item) != 0), index));
+            pieces_.back()->set_strategy(StrategyCreator::createStrategy(pieces_.back()->role_));
             index++;
         }
     }
@@ -153,6 +154,27 @@ bool Application::_checkmate()
     return false;
 }
 
+bool Application::_checkvictory()
+{
+    // 是否可以移动帅的位置以达到避免将军
+    int emleGeneral = 0;
+    for(const auto piece : pieces_)
+    {
+        if(piece->camp_ == current_camp_ && piece->role_ == PieceRole::Generals)
+        {
+            emleGeneral = piece->pos_;
+            break;
+        }
+    }
+
+
+    // 是否可以干掉当前将军的子避免将军
+
+    // 是否可以破环当前将军条件
+
+    
+}
+
 void Application::_highlight(int& pos) 
 {
     QFile file(piece_pic_[_camp(pos)][int(_role(pos))]);
@@ -182,7 +204,8 @@ void Application::_move_pieces(int& previous, int& current)
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][int(_role(previous))]);
 
     // 变更现在位置逻辑棋子的信息
-    _change_info(_camp(previous), _role(previous), current);
+    // _change_info(_camp(previous), _role(previous), current);
+    pieces_[current] = pieces_[previous];
 
     pieces_[previous]->camp_ = Camp::White;
     pieces_[previous]->role_ = PieceRole::None;
@@ -192,6 +215,7 @@ void Application::_move_pieces(int& previous, int& current)
 
     if(_checkmate())
     {
+        is_checkmate_ = true;
         qDebug() << "将军";
     }
 }
