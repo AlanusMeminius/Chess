@@ -100,8 +100,28 @@ struct TraceUnit
 
 inline Camp operator!(const Camp& camp) noexcept
 {
+    if (camp > Camp::Black)
+    {
+        return camp;
+    }
+    
     return (camp == Camp::Red) ? Camp::Black : Camp::Red;
 }
+
+// 先这样以后重构
+class Point
+{
+public:
+    Point() : pos_(0)
+    {}
+    Point(int x, int y) : pos_(9*x + y)
+    {}
+    int GetPos() const { return pos_; }
+    void SetPos(int pos) { pos_ = pos; }
+    bool isValid() const { return ((pos_ >= 0) && (pos_ <= 80)); }
+private:
+    int pos_;
+};
 
 class Piece 
 {

@@ -9,78 +9,71 @@
 
 #include "Piece.h"
 
-class Strategy {
+class Strategy 
+{
 public:
     virtual ~Strategy() = default;
 
     virtual bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) = 0;
-    virtual std::vector<int> get_possible_pos() {}
+    virtual std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) {}
 };
 
-class GeneralsStrategy : public Strategy {
+class GeneralsStrategy : public Strategy 
+{
 private:
-    std::map<Camp, std::vector<int>> possible_{
-            {Camp::Red,  {3,  4,  5,  12, 13, 14, 21, 22, 23}},
-            {Camp::Black, {66, 67, 68, 75, 76, 78, 84, 85, 86}}
-    };
+    static std::map<Camp, std::vector<int>> possible_;
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class AdvisorsStrategy : public Strategy {
+class AdvisorsStrategy : public Strategy 
+{
 private:
-    std::map<Camp, std::map<int, std::vector<int>>> possible_{
-            {Camp::Red, {
-                            {3,  {13}},
-                            {5,  {13}},
-                            {13, {3,  5,  21, 23}},
-                            {21, {13}},
-                            {23, {13}}
-                    },
-            },
-            {Camp::Black,  {
-                            {66, {76}},
-                            {68, {76}},
-                            {76, {66, 68, 84, 86}},
-                            {84, {76}},
-                            {86, {76}}
-                    },
-            }
-    };
+    static std::map<Camp, std::map<int, std::vector<int>>> possible_;
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>& ) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class BishopsStrategy : public Strategy {
-    std::map<Camp, std::vector<int>> possible_{
-            {Camp::Red, {2,  6,  18, 22, 26, 38, 42}},
-            {Camp::Black,  {47, 51, 63, 67, 71, 83, 87}}
-    };
+class BishopsStrategy : public Strategy 
+{
+    static std::map<Camp, std::map<int, std::vector<int>>> possible_;
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class HorsesStrategy : public Strategy {
+class HorsesStrategy : public Strategy 
+{
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class ChariotsStrategy : public Strategy {
+class ChariotsStrategy : public Strategy 
+{
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class CannonsStrategy : public Strategy {
+class CannonsStrategy : public Strategy 
+{
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class SoldiersStrategy : public Strategy {
+class SoldiersStrategy : public Strategy 
+{
 public:
     bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) override;
+    std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) override;
 };
 
-class StrategyCreator {
+class StrategyCreator 
+{
 public:
     static std::shared_ptr<Strategy> createStrategy(PieceRole role) {
         switch (role) {

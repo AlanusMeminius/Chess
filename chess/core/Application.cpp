@@ -142,7 +142,7 @@ bool Application::_checkmate()
     // 判断是否可以将军
     for(const auto piece : pieces_)
     {
-        if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ >= PieceRole::Soldiers)
+        if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
         {
             if(piece->is_movable(emleGeneral, pieces_))
             {
@@ -204,8 +204,9 @@ void Application::_move_pieces(int& previous, int& current)
     piece_widgets_[current]->load(piece_pic_[_camp(previous)][int(_role(previous))]);
 
     // 变更现在位置逻辑棋子的信息
-    // _change_info(_camp(previous), _role(previous), current);
-    pieces_[current] = pieces_[previous];
+    _change_info(_camp(previous), _role(previous), current);
+    // pieces_[current] = pieces_[previous];
+    // pieces_[current]->pos_ = current;
 
     pieces_[previous]->camp_ = Camp::White;
     pieces_[previous]->role_ = PieceRole::None;
