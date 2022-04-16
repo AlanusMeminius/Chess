@@ -129,6 +129,7 @@ public:
     Camp camp_;
     PieceRole role_;
     int pos_;
+    std::shared_ptr<Strategy> _strategy;
 
 public:
     Piece(char role, Camp camp, int pos);
@@ -137,7 +138,6 @@ public:
 
 private:
     static const std::array<char, 7> _roleChar;
-    std::shared_ptr<Strategy> _strategy;
 };
 
 #endif //CHESS_PIECE_H

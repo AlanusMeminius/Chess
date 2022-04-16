@@ -9,7 +9,7 @@
 
 const std::array<char, 7> Piece::_roleChar{ 'k', 'a', 'b', 'n', 'r', 'c', 'p' };
 
-Piece::Piece (char role, Camp camp, int pos) 
+Piece::Piece(char role, Camp camp, int pos) 
     : camp_(camp)
     , pos_(pos) 
 {
@@ -22,6 +22,7 @@ Piece::Piece (char role, Camp camp, int pos)
     {
         auto role_index = std::distance(std::begin(_roleChar), iter); // NOLINT(clang-diagnostic-shorten-64-to-32)
         role_ = PieceRole(role_index);
+        _strategy = std::move(StrategyCreator::createStrategy(role_));
     }  
     else
     {

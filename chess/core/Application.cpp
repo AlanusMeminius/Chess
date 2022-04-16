@@ -128,7 +128,7 @@ bool Application::_check_strategy(int& pos)
 
 bool Application::_checkmate()
 {
-    // 找到敌方正英的将军
+    // 找到敌方的将军
     int emleGeneral = 0;
     for(const auto piece : pieces_)
     {
@@ -139,7 +139,7 @@ bool Application::_checkmate()
         }
     }
 
-    // 判断是否可以将军
+    // 判断可以将军
     for(const auto piece : pieces_)
     {
         if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
@@ -156,7 +156,7 @@ bool Application::_checkmate()
 
 bool Application::_checkvictory()
 {
-    // 是否可以移动帅的位置以达到避免将军
+    // 获取帅的位置
     int emleGeneral = 0;
     for(const auto piece : pieces_)
     {
@@ -167,11 +167,46 @@ bool Application::_checkvictory()
         }
     }
 
+    // 是否可以移动帅的位置以达到避免将军
+    auto possibles = pieces_[emleGeneral]->_strategy->get_possible_pos((*pieces_[emleGeneral].get()), pieces_);
+    auto temp = pieces_;
+    for (const auto& possible : possibles)
+    {
+        // 尝试走一步
+        // temp
+
+        // 看结果
+        // if(!checkmates( ))
+        // {
+        //     return false;
+        // }
+    }
 
     // 是否可以干掉当前将军的子避免将军
+    // 统计将军的棋子
+    std::vector<int> checkmates;
+    for(const auto piece : pieces_)
+    {
+        if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
+        {
+            if(piece->is_movable(emleGeneral, pieces_))
+            {
+                checkmates.push_back(piece->pos_);
+            }
+        }
+    }
+
+    // 如果有一个，看是否可以干掉当棋子
+    if(checkmates.size() == 1)
+    {
+        // if(_tryKillCheckmates(checkmates[0]))
+        // {
+        //     return false;
+        // }
+    }
 
     // 是否可以破环当前将军条件
-
+    // checkmates
     
 }
 
@@ -205,19 +240,22 @@ void Application::_move_pieces(int& previous, int& current)
 
     // 变更现在位置逻辑棋子的信息
     _change_info(_camp(previous), _role(previous), current);
-    // pieces_[current] = pieces_[previous];
-    // pieces_[current]->pos_ = current;
-
-    pieces_[previous]->camp_ = Camp::White;
-    pieces_[previous]->role_ = PieceRole::None;
+    pieces_[current]->_strategy = pieces_[previous]->_strategy;
 
     // 变更之前位置逻辑棋子的信息, 棋子控件加载空白
+    pieces_[previous]->camp_ = Camp::White;
+    pieces_[previous]->role_ = PieceRole::None;
+    pieces_[previous]->set_strategy(nullptr);
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 
     if(_checkmate())
     {
         is_checkmate_ = true;
-        qDebug() << "将军";
+        qDebug() << "_checkmate";
+        if(_checkvictory())
+        {
+            qDebug() << "victory";
+        }
     }
 }
 

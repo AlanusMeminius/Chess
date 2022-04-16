@@ -15,7 +15,7 @@ public:
     virtual ~Strategy() = default;
 
     virtual bool is_movable(int&, int&, const std::vector<std::shared_ptr<Piece>>&) = 0;
-    virtual std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) {}
+    virtual std::vector<int> get_possible_pos(const Piece& piece, const std::vector<std::shared_ptr<Piece>>& pieces) { return {}; }
 };
 
 class GeneralsStrategy : public Strategy 
