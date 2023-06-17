@@ -1,11 +1,7 @@
-//
-// Created by Uniqu on 2/10/2021.
-//
-
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
 #pragma once
-#pragma execution_character_set("utf-8") 
+ 
 
 #include <vector>
 #include <string>
@@ -73,29 +69,10 @@ enum class PieceRole {
     None,         // 空
 };
 
-// // 枚举值角色的比较
-// inline bool operator<(const PieceRole& lhs, const PieceRole& rhs) noexcept
-// {
-//     return int(lhs) < int(rhs);
-// }
-
-// inline bool operator<(const PieceRole& lhs, const int& rhs) noexcept
-// {
-//     return int(lhs) < rhs;
-// }
-
-
-
 enum class Camp {
     Red,
     Black,
     White,
-};
-
-struct TraceUnit
-{
-    int pos;
-    PieceRole role;
 };
 
 inline Camp operator!(const Camp& camp) noexcept
@@ -133,11 +110,18 @@ public:
 
 public:
     Piece(char role, Camp camp, int pos);
+    explicit Piece(PieceRole role, Camp camp, int pos);
     void set_strategy(const std::shared_ptr<Strategy>& strategy) { _strategy = strategy; }
     bool is_movable(int, const std::vector<std::shared_ptr<Piece>>& );
 
+    static const Piece whitePiece;
+    static const std::shared_ptr<Piece> whitePieceSharedPtr;
 private:
     static const std::array<char, 7> _roleChar;
 };
+
+using PiecePtr = std::shared_ptr<Piece>;
+using PiecePtrVec = std::vector<PiecePtr>;
+using TraceUnit = Piece;
 
 #endif //CHESS_PIECE_H

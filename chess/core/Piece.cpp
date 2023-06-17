@@ -1,26 +1,25 @@
 //
 // Created by Uniqu on 2/10/2021.
 //
-#pragma execution_character_set("utf-8") 
+ 
 
 #include "Piece.h"
 #include "Strategy.h"
 #include <algorithm>
 
 const std::array<char, 7> Piece::_roleChar{ 'k', 'a', 'b', 'n', 'r', 'c', 'p' };
+const Piece Piece::whitePiece = Piece('0', Camp::White, -1);
+const std::shared_ptr<Piece> Piece::whitePieceSharedPtr = std::make_shared<Piece>(Piece::whitePiece);
 
 Piece::Piece(char role, Camp camp, int pos) 
     : camp_(camp)
     , pos_(pos) 
 {
-    /*
-     * 将初始化棋盘编码字母所代表的类型转化为int和类型
-     * */
-    const auto iter = std::find(_roleChar.begin (), _roleChar.end (), tolower(role));
+    const auto iter = std::find(_roleChar.begin(), _roleChar.end(), tolower(role));
 
-    if (iter != _roleChar.end ())
+    if (iter != _roleChar.end())
     {
-        auto role_index = std::distance(std::begin(_roleChar), iter); // NOLINT(clang-diagnostic-shorten-64-to-32)
+        auto role_index = std::distance(std::begin(_roleChar), iter);
         role_ = PieceRole(role_index);
         _strategy = std::move(StrategyCreator::createStrategy(role_));
     }  
@@ -28,7 +27,14 @@ Piece::Piece(char role, Camp camp, int pos)
     {
         role_ = PieceRole::None;
     }
-        
+}
+
+Piece::Piece(PieceRole role, Camp camp, int pos)
+    : camp_(camp)
+    , pos_(pos)
+    , role_(role)
+{
+    _strategy = std::move(StrategyCreator::createStrategy(role_));
 }
 
 bool Piece::is_movable(int destion, const std::vector<std::shared_ptr<Piece>>& pieces)

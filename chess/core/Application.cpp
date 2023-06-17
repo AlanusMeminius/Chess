@@ -1,5 +1,3 @@
-#pragma execution_character_set("utf-8") 
-
 #include <QDebug>
 
 #include "Application.h"
@@ -34,10 +32,24 @@ void Application::_init_logic_pieces()
     int index = 0;
     for (const auto& item : init_chess_board_)
     {
-        if (!ispunct(item))
+        if (!std::ispunct(item))
         {
             board_.emplace_back(item);
-            pieces_.push_back(std::make_shared<Piece>(item, Camp(isupper(item) != 0), index));
+            Camp camp = Camp::White;
+            if(item == '0')
+            {
+                camp = Camp::White;
+            }
+            else if(std::isupper(item))
+            {
+                camp = Camp::Black;
+            }
+            else
+            {
+                camp = Camp::Red;
+            }
+
+            pieces_.push_back(std::make_shared<Piece>(item, camp, index));
             pieces_.back()->set_strategy(StrategyCreator::createStrategy(pieces_.back()->role_));
             index++;
         }
@@ -126,11 +138,11 @@ bool Application::_check_strategy(int& pos)
     return is_movable_;
 }
 
-bool Application::_checkmate()
+bool Application::_checkmate(const std::vector<std::shared_ptr<Piece>> pieces)
 {
     // 找到敌方的将军
     int emleGeneral = 0;
-    for(const auto piece : pieces_)
+    for(const auto piece : pieces)
     {
         if(piece->camp_ == current_camp_ && piece->role_ == PieceRole::Generals)
         {
@@ -140,11 +152,28 @@ bool Application::_checkmate()
     }
 
     // 判断可以将军
-    for(const auto piece : pieces_)
+    for(const auto piece : pieces)
     {
         if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
         {
             if(piece->is_movable(emleGeneral, pieces_))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Application::_checkmate(const std::vector<std::shared_ptr<Piece>>& pieces, const int generalPos)
+{
+    // 判断将军状态
+    for(const auto piece : pieces)
+    {
+        if(piece->camp_ != pieces[generalPos]->camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
+        {
+            if(piece->is_movable(generalPos, pieces_))
             {
                 return true;
             }
@@ -167,47 +196,101 @@ bool Application::_checkvictory()
         }
     }
 
-    // 是否可以移动帅的位置以达到避免将军
-    auto possibles = pieces_[emleGeneral]->_strategy->get_possible_pos((*pieces_[emleGeneral].get()), pieces_);
-    auto temp = pieces_;
-    for (const auto& possible : possibles)
+    for (const auto& piece : pieces_)
     {
-        // 尝试走一步
-        // temp
-
-        // 看结果
-        // if(!checkmates( ))
-        // {
-        //     return false;
-        // }
-    }
-
-    // 是否可以干掉当前将军的子避免将军
-    // 统计将军的棋子
-    std::vector<int> checkmates;
-    for(const auto piece : pieces_)
-    {
-        if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
+        if (piece->camp_ == (!current_camp_) && piece->role_ < PieceRole::None)
         {
-            if(piece->is_movable(emleGeneral, pieces_))
+            auto possible = piece->_strategy->get_possible_pos(*(piece.get()), pieces_);
+            for(const auto& pos : possible)
             {
-                checkmates.push_back(piece->pos_);
+                auto temp = pieces_;
+                _move_piece(temp, piece->pos_, pos);
+                
+                if(!_checkmate(temp, emleGeneral))
+                {
+                    return false;
+                }
             }
         }
     }
+    
+    return true;
 
-    // 如果有一个，看是否可以干掉当棋子
-    if(checkmates.size() == 1)
+    // // 是否可以移动帅的位置以达到避免将军
+    // auto possibles = pieces_[emleGeneral]->_strategy->get_possible_pos((*pieces_[emleGeneral].get()), pieces_);
+    // auto temp = pieces_;
+    // for (const auto& possible : possibles)
+    // {
+    //     // 尝试走一步
+    //     temp[possible]->role_ = PieceRole::Generals;
+    //     temp[possible]->camp_ = current_camp_;
+    //     temp[emleGeneral]->role_ = PieceRole::None;
+
+    //     // 看结果
+    //     if(!_checkmate(temp))
+    //     {
+    //         return false;
+    //     }
+    // }
+
+    // // 是否可以干掉当前将军的子避免将军
+    // // 统计将军的棋子
+    // std::vector<int> checkmates;
+    // for(const auto piece : pieces_)
+    // {
+    //     if(piece->camp_ != current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
+    //     {
+    //         if(piece->is_movable(emleGeneral, pieces_))
+    //         {
+    //             checkmates.push_back(piece->pos_);
+    //         }
+    //     }
+    // }
+
+    // // 如果有一个，看是否可以干掉当棋子
+    // if(checkmates.size() == 1)
+    // {
+    //     if(_try_kill_checkmates(checkmates[0]))
+    //     {
+    //         return false;
+    //     }
+    // }
+
+    // // 是否可以破环当前将军条件
+    // checkmates;
+    // for (const auto& checkmate : checkmates)
+    // {
+    //     switch (pieces_[checkmate]->role_)
+    //     {
+    //     case PieceRole::Horses:
+    //         break;
+    //     case PieceRole::Chariots:
+    //         break;
+    //     case PieceRole::Cannons:
+    //         break;
+    //     case PieceRole::Soldiers:
+    //     break;
+    //     default:
+    //         break;
+    //     }
+    //     pieces_[checkmate]->role_ = PieceRole::None;
+        
+    // }
+    
+    // return true;
+}
+bool Application::_move_piece(std::vector<std::shared_ptr<Piece>>& pieces, const int source, const int target)
+{
+    if(source == target)
     {
-        // if(_tryKillCheckmates(checkmates[0]))
-        // {
-        //     return false;
-        // }
+        return false;
     }
 
-    // 是否可以破环当前将军条件
-    // checkmates
-    
+    pieces[target] = pieces[source];
+    pieces[target]->pos_ = target;
+    pieces[source] = Piece::whitePieceSharedPtr;
+    pieces[source]->pos_ = source;
+    return true;
 }
 
 void Application::_highlight(int& pos) 
@@ -224,7 +307,24 @@ void Application::_highlight(int& pos)
     piece_widgets_[pos]->load(h_byteArray);
 }
 
-void Application::_move_pieces(int& previous, int& current) 
+bool Application::_try_kill_checkmates(int checkmate_pos)
+{
+    // 判断可以将军
+    for(const auto piece : pieces_)
+    {
+        if(piece->camp_ == current_camp_ && piece->role_ >= PieceRole::Horses && piece->role_ <= PieceRole::Soldiers)
+        {
+            if(piece->is_movable(checkmate_pos, pieces_))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void Application::_move_pieces(int previous, int current) 
 {
     // 反转flag
     _reverse_flag();
@@ -232,7 +332,7 @@ void Application::_move_pieces(int& previous, int& current)
     ui->sideBar->subStartPanel->timeRecord->reverse();
 
     // 记录棋谱
-    Trace trace{{{previous, _role(previous)}, {current, _role(current)}}};
+    Trace trace{{{*(pieces_[previous])}, {*(pieces_[current])}}};
     _step_history(trace);
 
     // 选中位置加载之前选中的棋子
@@ -248,7 +348,7 @@ void Application::_move_pieces(int& previous, int& current)
     pieces_[previous]->set_strategy(nullptr);
     piece_widgets_[previous]->load(QString(":/blank.svg"));
 
-    if(_checkmate())
+    if(_checkmate(pieces_))
     {
         is_checkmate_ = true;
         qDebug() << "_checkmate";
@@ -289,23 +389,23 @@ void Application::_step_history(const Trace& trace)
     QString new_;
 
     // 得到相关信息
-    Camp camp = _camp(trace[0].pos);
-    int column = trace[0].pos % 9;
-    int column_distance_ = trace[0].pos / 9 - trace[1].pos / 9;
+    Camp camp = trace[0].camp_;
+    int column = trace[0].pos_ % 9;
+    int column_distance_ = trace[0].pos_ / 9 - trace[1].pos_ / 9;
 
     // 先组装前半部分
-    QString character = piece_character_[int(camp)][int(trace[0].role)];
+    QString character = piece_character_[int(camp)][int(trace[0].role_)];
     former_ = character + _number_string[int(camp)][bool(camp) ? (8 - column) : (column)];
 
     // 查找是否分前后
     for (int k = column; k < 90; k += 9)
     {
-        if (k == trace[0].pos)
+        if (k == trace[0].pos_)
             continue;
         
-        if (_camp(k) == camp && _role(k) == trace[0].role)
+        if (_camp(k) == camp && _role(k) == trace[0].role_)
         {
-            if (k < trace[0].pos)
+            if (k < trace[0].pos_)
                 former_ = tr("前") + character;
             else
                 former_ = tr("后") + character;
@@ -314,13 +414,18 @@ void Application::_step_history(const Trace& trace)
     }
 
     // 后组装后半部分
-    int columnAfter = trace[1].pos % 9;
-    bool isRow = trace[0].pos % 9 - trace[1].pos % 9;
+    int columnAfter = trace[1].pos_ % 9;
+    bool isRow = trace[0].pos_ % 9 - trace[1].pos_ % 9;
     if (column_distance_ != 0)
-        new_ = (column_distance_ > 0 ? (bool(camp) ? tr("进") : tr("退")) : (bool(camp) ? tr("退") : tr("进")))
-            + (isRow == 0 ? _number_string[int(camp)][abs(column_distance_) - 1] : _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)]);
+    {
+        new_ = (column_distance_ > 0 ? (bool(camp) ? tr("进") : tr("退")) : (bool(camp) ? tr("退") : tr("进"))) + 
+               (isRow == 0 ? _number_string[int(camp)][abs(column_distance_) - 1] : _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)]);
+    }   
     else
+    {
         new_ = tr("平") + _number_string[int(camp)][bool(camp) ? (8 - columnAfter) : (columnAfter)];
+    }
+        
         
     // 加入到走法记录里面
     step_list->addItem(former_ + new_);
@@ -335,14 +440,14 @@ void Application::undo()
     }
     
     Trace last = trace_vector_.back();
-    _change_info(_camp(last[1].pos), last[0].role, last[0].pos);
-    piece_widgets_[last[0].pos]->load(piece_pic_[_camp(last[1].pos)][int(last[0].role)]);
-    piece_widgets_[last[1].pos]->load(
-        (last[1].role < PieceRole::None) ? piece_pic_[_camp(last[1].pos)][int(last[1].role)] : ":/blank.svg"
+    _change_info(_camp(last[1].pos_), last[0].role_, last[0].pos_);
+    piece_widgets_[last[0].pos_]->load(piece_pic_[_camp(last[1].pos_)][int(last[0].role_)]);
+    piece_widgets_[last[1].pos_]->load(
+        (last[1].role_ < PieceRole::None) ? piece_pic_[_camp(last[1].pos_)][int(last[1].role_)] : ":/blank.svg"
     );
-    _change_info(!_camp(last[1].pos), last[1].role, last[1].pos);
+    _change_info(!_camp(last[1].pos_), last[1].role_, last[1].pos_);
     _reverse_flag();
-    previous_select_ = last[0].pos;
+    previous_select_ = last[0].pos_;
     ui->campHint->reverse(bool(current_camp_));
     step_list->takeItem(step_list->count() - 1);
     trace_vector_.pop_back();

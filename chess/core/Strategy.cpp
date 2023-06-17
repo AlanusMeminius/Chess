@@ -1,7 +1,8 @@
-#pragma execution_character_set("utf-8") 
+ 
 
 #include "Strategy.h"
 #include <algorithm>
+
 namespace {
 
 inline int v_coordinate(int a) { return a / 9; }
@@ -57,14 +58,16 @@ std::vector<int> GeneralsStrategy::get_possible_pos(const Piece& piece, const st
     {
         if(pieces[(*iter)]->camp_ == piece.camp_)
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
 
         if(!(is_same_straight_line(piece.pos_, *iter) && linear_distance(piece.pos_, *iter) < 2))
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
     }
     
@@ -108,7 +111,7 @@ std::vector<int> AdvisorsStrategy::get_possible_pos(const Piece& piece, const st
     {
         if(pieces[(*iter)]->camp_ == piece.camp_)
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
         }
     }
@@ -165,14 +168,16 @@ std::vector<int> BishopsStrategy::get_possible_pos(const Piece& piece, const std
     {
         if(pieces[(*iter)]->camp_ == piece.camp_)
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
 
         if(pieces[(piece.pos_ + (*iter)) / 2]->role_ != PieceRole::None)
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
     }
     return possible_vector;
@@ -260,17 +265,19 @@ std::vector<int> HorsesStrategy::get_possible_pos(const Piece& piece, const std:
     
     for (auto iter = possible_vector.begin(); iter < possible_vector.end(); ++iter)
     {
-        if(pieces[(*iter)]->camp_ == piece.camp_)
+        if (pieces[(*iter)]->camp_ == piece.camp_)
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
 
         int pos = piece.pos_;
-        if(!is_movable(pos, *iter, pieces))
+        if (!is_movable(pos, *iter, pieces))
         {
-            possible_vector.erase(iter);
+            iter = possible_vector.erase(iter);
             iter--;
+            continue;
         }
     }
 
@@ -340,7 +347,7 @@ std::vector<int> ChariotsStrategy::get_possible_pos(const Piece& piece, const st
         }
     }
 
-    for(int crow = row + 1; crow <= 10; ++crow)
+    for(int crow = row + 1; crow < 10; ++crow)
     {
         if(pieces[point_to_pos(crow, col)]->role_ == PieceRole::None)
         {
@@ -410,7 +417,7 @@ std::vector<int> CannonsStrategy::get_possible_pos(const Piece& piece, const std
     int col = piece.pos_ % 9;
     int row = piece.pos_ / 9;
 
-    for(int ccol = col + 1; ccol <= 9; ++ccol)
+    for(int ccol = col + 1; ccol < 9; ++ccol)
     {
         if(pieces[point_to_pos(row, ccol)]->role_ == PieceRole::None)
         {
@@ -419,7 +426,7 @@ std::vector<int> CannonsStrategy::get_possible_pos(const Piece& piece, const std
 
         if(pieces[point_to_pos(row, ccol)]->role_ != PieceRole::None)
         {
-            for(int pccol = ccol + 1; pccol <= 9; ++pccol)
+            for(int pccol = ccol + 1; pccol < 9; ++pccol)
             {
                 if(pieces[point_to_pos(row, pccol)]->role_ != PieceRole::None && 
                    pieces[point_to_pos(row, pccol)]->camp_ != !(piece.camp_))
@@ -454,7 +461,7 @@ std::vector<int> CannonsStrategy::get_possible_pos(const Piece& piece, const std
         }
     }
 
-    for(int crow = row + 1; crow <= 10; ++crow)
+    for(int crow = row + 1; crow < 10; ++crow)
     {
         if(pieces[point_to_pos(crow, col)]->role_ == PieceRole::None)
         {
@@ -463,7 +470,7 @@ std::vector<int> CannonsStrategy::get_possible_pos(const Piece& piece, const std
 
         if(pieces[point_to_pos(crow, col)]->role_ != PieceRole::None)
         {
-            for(int pcrow = crow + 1; pcrow <= 10; ++pcrow)
+            for(int pcrow = crow + 1; pcrow < 10; ++pcrow)
             {
                 if(pieces[point_to_pos(pcrow, col)]->role_ != PieceRole::None && 
                    pieces[point_to_pos(pcrow, col)]->camp_ != !(piece.camp_))

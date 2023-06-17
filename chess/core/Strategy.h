@@ -1,7 +1,7 @@
 #ifndef CHESS_STRATEGY_H
 #define CHESS_STRATEGY_H
 #pragma once
-#pragma execution_character_set("utf-8") 
+ 
 
 #include <map>
 #include <vector>
@@ -92,7 +92,7 @@ public:
             case PieceRole::Soldiers:
                 return std::make_shared<SoldiersStrategy>();
             default:
-                return nullptr;
+                return {};
         }
     }
 };

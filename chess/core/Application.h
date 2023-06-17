@@ -1,9 +1,4 @@
-#ifndef CHESS_APPLICATION_H
-#define CHESS_APPLICATION_H
-
 #pragma once
-#pragma execution_character_set("utf-8")
-
 #include <iostream>
 #include <tuple>
 
@@ -22,6 +17,11 @@ public:
         SigleMode,
         NetworkMode, 
         AiExercise
+    };
+
+    enum TipsMode {
+        Newer,
+        Older
     };
 
     explicit Application(Mode mode);
@@ -46,15 +46,14 @@ private:
             {Camp::Black,  {":/rk.svg", ":/ra.svg", ":/rb.svg", ":/rn.svg", ":/rr.svg", ":/rc.svg", ":/rp.svg"}},
     };
 
-    // 棋谱记录
     [[maybe_unused]] std::array<std::array<QString, 7>, 2> piece_character_{
-            "將", "士", "象", "馬", "車", "砲", "卒",
-            "帥", "仕", "相", "傌", "俥", "炮", "兵",
+            {"將", "士", "象", "馬", "車", "砲", "卒",},
+            {"帥", "仕", "相", "傌", "俥", "炮", "兵",},
     };
 
     [[maybe_unused]] std::array<std::array<QString, 9>, 2> _number_string{
-            "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "一", "二", "三", "四", "五", "六", "七", "八", "九"
+            {"1", "2", "3", "4", "5", "6", "7", "8", "9",},
+            {"一", "二", "三", "四", "五", "六", "七", "八", "九",},
     };
     
     typedef std::array<TraceUnit, 2> Trace;
@@ -114,21 +113,22 @@ private:
 
     bool _check_strategy(int &);
     
-    bool _checkmate();
+    bool _checkmate(const std::vector<std::shared_ptr<Piece>> pieces);
+    bool _checkmate(const std::vector<std::shared_ptr<Piece>>& pieces, const int generalPos);
 
     bool _checkvictory();
+    bool _move_piece(std::vector<std::shared_ptr<Piece>>& pieces, const int source, const int target);
+
+    bool _try_kill_checkmates(int checkmate_pos);
 
     /*
      * ui界面改变
      * */
     void _highlight(int &);
 
-    void _move_pieces(int &, int &);
+    void _move_pieces(int , int );
 
     /* 行进历史记录
      * */
     void _step_history(const Trace &);
 };
-
-
-#endif //CHESS_APPLICATION_H
